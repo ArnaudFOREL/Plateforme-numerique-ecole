@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<link href="{{asset('dist/dropzone.css')}}" rel="stylesheet" />
+{% endblock %}
+
+{% block main %}
+	<h1>Nouveaux documents de cours</h1>
+
+	<div id="alert"></div>
+	<section>
+		<div class="jumbotron-fluid">
+			<!-- row -->
+			<div class="row">
+				<div class="col-lg-8">
+			    	<h4><i class="fa fa-angle-right"></i> Ajouter des documents à cet objet (vidéo, image, pdf...)</h4>
+					<section class="wrapper">
+				        <div class="form-group">
+					         <label class=" control-label required">Ajouter les documents ci dessous :</label>
+					         <div class="col-lg-12">
+					             	<div class="dropzone">
+										
+									 </div>
+					         </div>
+					    </div>			          
+				    </section>
+				</div>
+				
+		    </div>
+	    </div>
+	</section>
+
+	<a href="{{ path('course_edit', {'id': course.id}) }}" class="btn btn-secondary"><i class="fa fa-chevron-left mr-2"></i>Retour</a>
+	<a href="{{ path('course_edit', {'id': course.id}) }}" class="btn btn-success">Terminer</a>
+
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('dist/dropzone.js')}}"></script>
+	{% include 'course/config_dropzone.html.twig' with {'object': object} %}
+{% endblock %}

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Ecole Lucie Aubrac - Ayse (Haute-Savoie 74)</title>
+    <link rel="shortcut icon" href="{{ asset('favicon.ico')}}">
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/f180c2c395.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="{{ asset('css/mdb.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,700|Roboto|Kaushan+Script&display=swap" rel="stylesheet"> 
+    <link href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" rel="stylesheet">
+    {% block stylesheets %}{% endblock %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "url": "https://ecole-ayse.fr",
+        "logo": "{{ asset('img/company_logo.png') }}"
+    }
+    </script>
+    
+</head>
+
+<body>
+
+    <!-- Navigation & Intro -->
+    <header id="top-section">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top scrolling-navbar">
+            <div class="container">
+                <a class="navbar-brand font-weight-bold title" href="{{ path('homepage_index') }}">Environnement de travail - Ayse</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <ul class="list-unstyled navbar-nav mr-auto">
+                        {# <li class="nav-item dropdown ml-4 mb-0">
+                            <a class="nav-link title" href="{{ path('homepage_index') }}"> Accueil </a>
+                        </li> #}
+                        {# <li class="nav-item ml-4">
+                            <a class="nav-link title" href="#" data-offset="90">Lien</a>
+                        </li>
+                        <li class="nav-item ml-4">
+                            <a class="nav-link title" href="#" data-offset="90">Lien</a>
+                        </li>
+                        <li class="nav-item ml-4">
+                            <a class="nav-link title" href="#" data-offset="90">Lien</a>
+                        </li>                         #}
+                        {# <li class="nav-item dropdown ml-4">
+                            <a class="nav-link title" href="#contact">Contact </a>
+                        </li> #}
+                    </ul>
+                    <!-- Social Icon  -->
+                    <ul class="navbar-nav nav-flex-icons">
+                        <li class="nav-item ml-4">
+                            <div class="switch">
+                                <label>
+                                    <i class="fa fa-adjust"></i> Mode sombre
+                                    <input type="checkbox" id="darkmode" {% if app.request.cookies.get('darkMode') == 1 %} checked {% endif %}>
+                                    <span class="lever"></span>
+                                </label>
+                            </div>
+                        </li> 
+                        {% if app.user %}
+                        <li class="nav-item">
+                            <a class="nav-link title" href="{{ path('blog_index')}}"><i class="fa fa-user"></i> Accéder à mon espace</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link title" href="#connexion"><i class="fa fa-user"></i> Connexion</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Intro Section -->
+        <!--Carousel Wrapper-->
+        <div id="carousel-example-1z" class="carousel slide carousel-fade" data-ride="carousel">
+            <!--Indicators-->
+            <ol class="carousel-indicators">
+            <li data-target="#carousel-example-1z" data-slide-to="0" class="active"></li>
+            <li data-target="#carousel-example-1z" data-slide-to="1"></li>
+            <li data-target="#carousel-example-1z" data-slide-to="2"></li>
+            </ol>
+            <!--/.Indicators-->
+            <!--Slides-->
+            <div class="carousel-inner" role="listbox">
+            <!--First slide-->
+            <div class="carousel-item active">
+                <div class="view h-100">
+                    <img class="d-block h-100 w-lg-100" src="https://mdbootstrap.com/img/Photos/Others/nature7.jpg" alt="First slide">
+                    <div class="mask">
+                        <!-- Caption -->
+                        <div class="full-bg-img flex-center white-text">
+                            <ul class="list-unstyled animated fadeIn col-10">
+                                <li>
+                                    <h1 class="h1-responsive font-weight-bold">Bienvenue sur l'environnement de travail de l'école Lucie Aubrac !</h1>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.Caption -->
+                    </div>
+                </div>
+            </div>
+            <!--/First slide-->
+            <!--Second slide-->
+            <div class="carousel-item h-100">
+                <div class="view h-100">
+                    <img class="d-block h-100 w-lg-100" src="https://mdbootstrap.com/img/Photos/Others/city10.jpg" alt="Second slide">
+                    <div class="mask">
+                        <!-- Caption -->
+                        <div class="full-bg-img flex-center white-text">
+                            <ul class="list-unstyled animated fadeIn col-10">
+                                <li>
+                                    <h1 class="h1-responsive font-weight-bold">Un espace d'échange entre élèves et professeurs</h1>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.Caption -->
+                    </div>
+                </div>
+            </div>
+            <!--/Second slide-->
+            <!--Third slide-->
+            <div class="carousel-item">
+                <div class="view h-100">
+                    <img class="d-block h-100 w-lg-100" src="https://mdbootstrap.com/img/Photos/Others/city9.jpg" alt="Third slide">
+                    <div class="mask">
+                        <!-- Caption -->
+                        <div class="full-bg-img flex-center white-text">
+                            <ul class="list-unstyled animated fadeIn col-md-12">
+                                <li>
+                                    <h1 class="h1-responsive font-weight-bold">Mais aussi avec les parents</h1>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.Caption -->
+                    </div>
+                </div>
+            </div>
+            <!--/Third slide-->
+            </div>
+            <!--/.Slides-->
+            <!--Controls-->
+            <a class="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Précédent</span>
+            </a>
+            <a class="carousel-control-next" href="#carousel-example-1z" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Suivant</span>
+            </a>
+            <!--/.Controls-->
+        </div>
+        <!--/.Carousel Wrapper-->
+
+    </header>
+    <!-- Navigation & Intro -->
+
+    <!-- Main layout -->
+    <main class="main">
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <img src="{{ asset('img/company_logo.png') }}" alt="ETN AYZE" class="img-fluid rounded mb-3">
+                </div>
+            </div>
+        </div>
+        {# <div class="container-fluid">
+            {{ include('default/carousel-vacances.html.twig')}}
+        </div> #}
+        <div class="container mt-5"
+            <!--Section: Content-->
+            <section class="dark-grey-text">
+
+                <!-- Section heading -->
+                <h2 class="text-center font-weight-bold mb-4 pb-2 wow fadeIn">Pourquoi cet environnement numérique de travail ?</h2>
+                <!-- Section description -->
+                <p class="text-center lead grey-text mx-auto mb-5 wow fadeIn" data-wow-delay="0.2s">Durant l'épisode de confinement que nous avons vécu, cet environnement a vu le jour pour simplifier les échanges entre élèves et professeurs.</p>
+
+                <!-- Grid row -->
+                <div class="row">
+
+                    <!-- Grid column -->
+                    <div class="col-lg-5 text-center text-lg-left view h-100 w-lg-100 wow fadeIn" data-wow-delay="0.4s">
+                        <img class="img-fluid" src="https://cdn.pixabay.com/photo/2015/12/15/06/42/kids-1093758_960_720.jpg" alt="Sample image">
+                        <div class="mask"></div>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-lg-7">
+
+                        <!-- Grid row -->
+                        <div class="row mb-3 wow fadeIn" data-wow-delay="0.3s">
+
+                            <!-- Grid column -->
+                            <div class="col-1">
+                                <i class="fas fa-share fa-lg indigo-text"></i>
+                            </div>
+                            <!-- Grid column -->
+
+                            <!-- Grid column -->
+                            <div class="col-xl-10 col-md-11 col-10">
+                                <h5 class="font-weight-bold mb-3">Fonctionnement</h5>
+                                <p class="grey-text">
+                                    Les devoirs sont mis en ligne par les professeurs au fur et à mesure des semaines. 
+                                    Les élèves peuvent rendre leur travaux directement en ligne, sur leur espace personnel.
+                                </p>
+                            </div>
+                            <!-- Grid column -->
+
+                        </div>
+                        <!-- Grid row -->
+
+                        <!-- Grid row -->
+                        <div class="row mb-3 wow fadeIn" data-wow-delay="0.3s">
+
+                            <!-- Grid column -->
+                            <div class="col-1">
+                                <i class="fas fa-share fa-lg indigo-text"></i>
+                            </div>
+                            <!-- Grid column -->
+
+                            <!-- Grid column -->
+                            <div class="col-xl-10 col-md-11 col-10">
+                                <h5 class="font-weight-bold mb-3">Sécurité</h5>
+                                <p class="grey-text">
+                                    L'accès à l'nvironnement de travail numérique est sécurisé par identifiant et mot de passe, fournis par l'école. 
+                                    Personne d'autre ne peut avoir accès à cet environnement.
+                                </p>
+                            </div>
+                            <!-- Grid column -->
+
+                        </div>
+                        <!-- Grid row -->
+
+                        <!--Grid row-->
+                        <div class="row wow fadeIn" data-wow-delay="0.3s">
+
+                            <!-- Grid column -->
+                            <div class="col-1">
+                                <i class="fas fa-share fa-lg indigo-text"></i>
+                            </div>
+                            <!-- Grid column -->
+
+                            <!-- Grid column -->
+                            <div class="col-xl-10 col-md-11 col-10">
+                                <h5 class="font-weight-bold mb-3">Simplicité</h5>
+                                <p class="grey-text mb-0">
+                                    Malgré de nombreux cours disponibles, seuls les cours de la semaine et du niveau de l'élève s'affichent.
+                                    Pas besoin de chercher pendant des heures.
+                                </p>
+                            </div>
+                            <!-- Grid column -->
+
+                        </div>
+                        <!--Grid row-->
+
+                    </div>
+                    <!--Grid column-->
+
+                </div>
+                <!-- Grid row -->
+
+            </section>
+            <!--Section: Content-->
+
+            <!--Section: Content-->
+            <section class="dark-grey-text wow fadeIn" data-wow-delay="0.3s">
+
+                <div class="row pr-lg-5">
+                <div class="col-md-7 mb-4">
+
+                    <div class="view">
+                        <img src="https://mdbootstrap.com/img/illustrations/graphics(1).png" class="img-fluid" alt="Office Work">
+                    </div>
+
+                </div>
+                <div class="col-md-5 d-flex align-items-center">
+                    <div>
+                    
+                    <h3 class="font-weight-bold mb-4">Une aide au quotidien</h3>
+
+                        <p>
+                            Cet environnement de travail a été pensé pour faciliter les échanges au quotidien, que l'on soit confinés ou non !
+                        </p>
+                        <p>
+                            Et dans un seul but : limiter les ruptures de rythmes scolaires et les apprentissages !
+                        </p>
+                        <p>
+                            Pour tous les élèves de Cp, Ce1, Ce2, Cm1 ou Cm2, les cours de la semaine sont accessibles à volonté afin de voir ou revoir les notions apprises en classe.
+                        </p>
+
+                        {# <button type="button" class="btn btn-orange btn-rounded mx-0">Download</button> #}
+
+                    </div>
+                </div>
+                </div>
+
+            </section>
+            <!--Section: Content-->
+
+            <!--Section: Content-->
+            <section class="dark-grey-text wow fadeIn" data-wow-delay="0.3s">
+
+                <div class="row pr-lg-5">
+                    <div class="col-md-5 d-flex align-items-center">
+                        <div>
+                        
+                        <h3 class="font-weight-bold mb-4">Une démarche écologique</h3>
+
+                            <p>
+                                A l'ère où l'on nous demande de faire attention à notre impact écologique, il est impensable de continuer à fournir des centaines de feuilles de papier aux élèves chaque année.
+                            </p>
+                            <p>
+                                Ici, les cours sont hébergés pour une durée indéterminée et consultable d'année en année. 
+                            </p>
+                            <p>
+                                Et nous avons fais le choix d'un hébergeur écologique : Infomaniak.
+                            </p>
+                            <a href="https://www.infomaniak.com/fr/hebergeur-ecologique" class="btn btn-success mx-0">En savoir plus</a>
+
+                        </div>
+                    </div>
+                    <div class="col-md-7 mb-4">
+
+                        <div class="view">
+                            <img src="https://mdbootstrap.com/img/illustrations/graphics(3).png" class="img-fluid" alt="Ecologie">
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+            <!--Section: Content-->
+
+            {% if app.user %}
+            <div class="row">
+                <div class="col-12 text-center">
+                    <a href="{{ path('blog_index') }}" class="btn btn-secondary text-uppercase">Accéder à mon espace</a>
+                </div>
+            </div>
+            {% else %}
+            <!-- Section: Login -->
+            <section class="section mt-5" id="connexion">
+                <h4 class="font-weight-bold text-uppercase"><strong>Accéder à l'environnement de travail</strong></h4>
+                <hr class="red mb-4">
+
+                
+                <div class=" z-depth-1 widget-spacing mt-0">
+                    <div class="card-body">
+
+                        <!-- Header -->
+                        <div class="text-center">
+                            <h4>Connexion</h4>
+                            <hr class="mt-2">
+                        </div>
+
+                        <!-- Body -->
+                        <p class="font-small text-center">Utilisez le formulaire ci dessous pour vous authentifier</p>
+
+                        <!-- Body -->
+                        <form action="{{ path('security_login') }}" method="post">
+                            <div class="md-form mb-5">
+                                <i class="fas fa-user prefix grey-text"></i>
+                                <label data-error="wrong" data-success="right" for="username">{{ 'label.username'|trans }}</label>
+                                <input type="text" id="username" name="_username" class="form-control validate "/>
+                            </div>
+        
+                            <div class="md-form pb-3">
+                                <i class="fas fa-lock prefix grey-text"></i>
+                                <label data-error="wrong" data-success="right" for="password">{{ 'label.password'|trans }}</label>
+                                <input type="password" id="password" name="_password" class="form-control validate " />
+        
+                                <input type="hidden" name="_target_path" value="{{ path('blog_index') }}"/>
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                            </div>                            
+        
+                            <!--Grid row-->
+                            <div class="row d-flex align-items-center mb-4">
+                                <!--Grid column-->
+                                <div class="text-center mb-3 col-md-12">
+                                    <button type="submit" class="btn btn-success btn-rounded z-depth-1">
+                                        <i class="fa fa-sign-in-alt" aria-hidden="true"></i> Se connecter
+                                    </button>
+                                </div>
+                                <!--Grid column-->
+                            </div>
+                            <!--Grid row-->
+                        </form>
+                    </div>
+                </div>
+
+            </section>
+            <!-- Section: Login -->
+            {% endif %}
+
+        </div>
+
+        </div>
+
+    </main>
+    <!-- Main content -->
+
+    <!--Footer-->
+    <footer class="page-footer text-center text-md-left unique-color-dark pt-0 wow fadeIn">
+        <!--Footer Links-->
+        <div class="container mt-5 mb-4 text-center text-md-left">
+            
+            <div class="row mt-3 p-5">
+
+                <!--First column-->
+                <div class="col-md-4 col-lg-4 col-xl-3 mb-5">
+                    <h6 class="spacing font-weight-bold">
+                        <strong>Environnement de travail numérique - Ecole Lucie Aubrac - Ayze</strong>
+                    </h6>
+                    <hr class="pink accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                    <p></p>
+                </div>
+                <!--/.First column-->
+               
+
+                <!--Third column-->
+                <div class="col-md-4 col-lg-2 col-xl-2 mx-auto mb-5">
+                    <h6 class="spacing font-weight-bold">
+                        <strong>Liens utiles</strong>
+                    </h6>
+                    <hr class="pink accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                    <p>
+                        <a href="https://www.ayze.fr/">Site de la commune d'Ayze</a>
+                    </p>
+                    <p>
+                        <a href="https://www.1jour1actu.com/info-animee/cest-qui-lucie-aubrac-manquent-chapo-et-seo">Qui était Lucie Aubrac ?</a>
+                    </p>
+                    <p>
+                        <a href="https://fr-fr.facebook.com/APE.AYZE/">Association de Parents d'Elèves - APE Ayze</a>
+                    </p>
+                </div>
+                <!--/.Third column-->
+
+                <!--Fourth column-->
+                <div class="col-md-4 col-lg-3 col-xl-3">
+                    <h6 class="spacing font-weight-bold">
+                        <strong>Contact</strong>
+                    </h6>
+                    <hr class="pink accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                    {# <p>
+                        <i class="fas fa-home mr-3"></i> 169 route de Bonneville, 74130 AYZE - FR</p> #}
+                    <p>
+                        <i class="fas fa-envelope mr-3"></i> webmaster@ecole-ayse.fr</p>
+                    {# <p>
+                        <i class="fas fa-phone mr-3"></i> +33 4 50 97 36 61</p> #}
+                </div>
+                <!--/.Fourth column-->
+                
+            </div>
+        </div>
+        <!--/.Footer Links-->
+
+        <!-- Copyright-->
+        <div class="footer-copyright text-center py-3">
+            <div class="container-fluid">
+                © 2020 Copyright: Arnaud FOREL
+            </div>
+        </div>
+        <!--/.Copyright -->
+
+    </footer>
+    <!--/.Footer-->
+
+    <div class="fixed-action-btn smooth-scroll" id="scrollUp">
+        <a href="#top-section" class="btn-floating btn-large red">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+    </div>
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="{{ asset('js/popper.min.js') }}"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="{{ asset('js/mdb.min.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('js/addons-pro/stepper.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+    <script>
+        //Animation init
+        new WOW().init();
+
+        $('#scrollUp').hide();
+
+        if($("#darkmode").is(":checked")){
+            $("body").addClass('dark-mode');
+            $(".navbar").addClass('special-color');
+            $(".mask").addClass('rgba-stylish-strong');
+            document.cookie = "darkMode=1;path=/";
+        } else {
+            document.cookie = "darkMode=0;path=/";
+        }
+       
+        $(window).scroll(function () {
+          if ($(this).scrollTop() > 300) {
+              $('#scrollUp').fadeIn('slow');
+          } else {
+              $('#scrollUp').fadeOut('slow');
+          }
+        });
+
+        $(document).ready(function() {
+            $('.mdb-select').materialSelect();
+            $('.datepicker').pickadate({
+                monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre',
+                'Novembre', 'Décembre'],
+                weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                today: 'aujourd\'hui',
+                clear: 'effacer',
+                formatSubmit: 'yyyy-mm-dd 00:00:00',
+                firstDay: 1,
+                closeOnSelect: true
+            });
+        });
+
+        $("#darkmode").click(function() {
+            $("body").toggleClass('dark-mode');
+            $(".navbar").toggleClass('special-color');
+            $(".mask").toggleClass('rgba-stylish-strong');
+            if($("#darkmode").is(":checked")){
+                document.cookie = "darkMode=1;path=/";
+            } else {
+                document.cookie = "darkMode=0;path=/";
+            }
+        });
+
+        window.cookieconsent.initialise({
+          "palette": {
+            "popup": {
+              "background": "#edeff5",
+              "text": "#838391"
+            },
+            "button": {
+              "background": "#4b81e8"
+            }
+          },
+          "content": {
+            "message": "Ce site utilise des cookies nécessaires à son fonctionnement.",
+            "dismiss": "J'ai compris",
+            "link": "Politique de confidentialité",
+            "href": "https://p2ea.info/politique de confidentialité.pdf"
+          }
+        });
+      </script>
+    </script>
+
+</body>
+
+</html>

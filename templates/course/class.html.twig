@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+	{% if is_granted('ROLE_ADMIN')%}
+		<div class="accordion md-accordion accordion-1" id="accordionEx23" role="tablist">
+			<div class="card">
+				<div class="card-header" role="tab" id="heading96">
+					<h5 class="mb-0 py-1">
+						<a class="font-weight-bold" data-toggle="collapse" href="#collapse96" aria-expanded="true"
+						aria-controls="collapse96">
+						{% if edit == false %}
+							<h3><i class="fa fa-plus mr-2"></i> Ajouter un nouveau groupe</h3>
+						{% else %}
+							<h3><i class="fa fa-pen mr-2"></i> Modifier le groupe {{ class.name }}</h3>
+						{% endif %}
+						</a>
+					</h5>
+				</div>
+				<div id="collapse96" class="collapse show" role="tabpanel" aria-labelledby="heading96" data-parent="#accordionEx23">
+					<div class="card-body">
+						<div class="row my-4">
+							<div class="col-md-12">
+								{{ form_start(form)}}
+		
+								{{ form_row(form.name, {'label': "Nom du groupe"})}}
+
+								{{ form_row(form.description, {'label': "Description du groupe (facultatif)"})}}
+								{# <div class="row"> #}
+									
+								{{ form_row(form.user, {'label': "Utilisateurs du groupe"})}}
+									
+								{# </div> #}
+								<a href="{{ path('admin_index') }}" class="btn btn-secondary"><i class="fa fa-chevron-left mr-2"></i>Retour</a>
+								<button type="submit" class="btn btn-success">Enregistrer</button>
+
+								{{ form_end(form)}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> 
+		</div>
+		<!--Accordion wrapper-->
+		
+		<hr>
+	{% else %}
+		<h3><i class="fa fa-pen mr-2"></i> Ajouter des utilisateurs au groupe {{ class.name }}</h3>
+		<div class="card-body">
+			<div class="row my-4">
+				<div class="col-md-12">
+					{{ form_start(form)}}
+
+					{{ form_row(form.name, {'row_attr': {'style': 'display:none'}}) }}
+ 					
+					{{ form_row(form.description, {'row_attr': {'style': 'display:none'}}) }}
+					{# <div class="row"> #}
+						
+					{{ form_row(form.user, {'label': "Utilisateurs du groupe"}) }}
+						
+					{# </div> #}
+					<a href="{{ path('admin_index') }}" class="btn btn-secondary"><i class="fa fa-chevron-left mr-2"></i>Retour</a>
+					<button type="submit" class="btn btn-success">Enregistrer</button>
+
+					{{ form_end(form)}}
+				</div>
+			</div>
+		</div>
+	{% endif %}
+
+	{# <h3>Groupes</h3>
+    
+    <div class="row">
+	{% for classroom in classrooms %}
+		
+			<div class="col-md-4 mb-4">
+
+                    <!--Card-->
+                    <div class="card">
+
+                        {# <!--Card image-->
+                        <div class="view overlay">
+                            <img src="{{ asset(category.image)}}" class="card-img-top" alt="">
+                        </div>
+                        <!--/.Card image--> 
+
+                        <!--Card content-->
+                        <div class="card-body">
+                        <!--Title-->
+                            <h4 class="card-title"><strong>{{classroom.name}}</strong></h4>
+                            <hr>
+                            <!--Text-->
+                            <p class="card-text mb-3">{{ classroom.description }}</p>
+                            {% if is_granted('ROLE_ADMIN')%}
+                            <p class="card-text text-right">
+                            	<a href="{{ path('course_classroomEdit', {'id': classroom.id}) }}" class="btn btn-warning">
+                            		<i class="fa fa-pen mr-2"></i> Modifier
+                            	</a>
+                            </p>
+                        	{% endif %}
+                    		<p class="card-text text-right">
+                    			{% for user in classroom.user %}
+                    				{{ user.fullName }} <br>
+                    			{% endfor %}
+                    		</p>
+                            
+
+                        </div>
+                        <!--/.Card content-->
+
+                    </div>
+                    <!--/.Card-->
+                </div>
+                <!--Grid column-->
+	{% endfor %}
+	</div> #}
+
+{% endblock %}

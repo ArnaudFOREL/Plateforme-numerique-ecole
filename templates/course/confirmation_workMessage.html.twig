@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+
+{% block main %}
+	<!--Section: Content-->
+	<section class="dark-grey-text p-5">
+
+		<!-- Grid row -->
+		<div class="row">
+
+			<!-- Grid column -->
+			<div class="col-md-5 mb-4 mb-md-0">
+
+				<div class="view">
+					<img src="https://42f2671d685f51e10fc6-b9fcecea3e50b3b59bdc28dead054ebc.ssl.cf5.rackcdn.com/illustrations/confirmation_2uy0.svg" class="img-fluid" alt="Message envoyé">
+				</div>
+
+			</div>
+			<!-- Grid column -->
+
+			<!-- Grid column -->
+			<div class="col-md-7 mb-lg-0 mb-4">
+
+				<!-- Section heading -->
+				<h3 class="font-weight-bold my-3">Message envoyé</h3>
+
+				<p class="text-muted mb-4 pb-2">Ton message a été envoyé aux professeurs.</p>
+
+				<a href="{{ path('blog_index') }}" class="btn btn-secondary"><i class="fa fa-chevron-left mr-2"></i>Retour à l'accueil</a>
+
+
+			</div>
+			<!-- Grid column -->
+
+		</div>
+		<!-- Grid row -->
+
+	</section>
+	<!--Section: Content-->
+
+	
+{% endblock %}

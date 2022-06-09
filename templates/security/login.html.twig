@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <title>{% block title %}Ecole d'Ayse (Haute Savoie - 74) - Connexion{% endblock %}</title>
+      <link rel="shortcut icon" href="{{ asset('favicon.ico')}}">
+      <!-- Font Awesome -->
+      <script src="https://kit.fontawesome.com/f180c2c395.js" crossorigin="anonymous"></script>
+      <!-- Bootstrap core CSS -->
+     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+      <!-- Material Design Bootstrap -->
+      <link href="{{ asset('css/mdb.css') }}" rel="stylesheet">
+      <!-- Your custom styles (optional) -->
+      <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,700|Roboto|Kaushan+Script&display=swap" rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" rel="stylesheet">
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "url": "https://p2ea.info",
+          "logo": "{{ asset('img/company_logo.png') }}"
+        }
+        </script>
+        <style>
+            .form-dark .font-small {
+              font-size: 0.8rem; }
+
+            .form-dark [type="radio"] + label,
+            .form-dark [type="checkbox"] + label {
+              font-size: 0.8rem; }
+
+            .form-dark [type="checkbox"] + label:before {
+              top: 2px;
+              width: 15px;
+              height: 15px; }
+
+            .form-dark .md-form label {
+              color: #fff; }
+
+            .form-dark input[type=email]:focus:not([readonly]) {
+              border-bottom: 1px solid #00C851;
+              -webkit-box-shadow: 0 1px 0 0 #00C851;
+              box-shadow: 0 1px 0 0 #00C851; }
+
+            .form-dark input[type=email]:focus:not([readonly]) + label {
+              color: #fff; }
+
+            .form-dark input[type=password]:focus:not([readonly]) {
+              border-bottom: 1px solid #00C851;
+              -webkit-box-shadow: 0 1px 0 0 #00C851;
+              box-shadow: 0 1px 0 0 #00C851; }
+
+            .form-dark input[type=password]:focus:not([readonly]) + label {
+              color: #fff; }
+
+            .form-dark input[type="checkbox"] + label:before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 17px;
+              height: 17px;
+              z-index: 0;
+              border: 1.5px solid #fff;
+              border-radius: 1px;
+              margin-top: 2px;
+              -webkit-transition: 0.2s;
+              transition: 0.2s; }
+
+            .form-dark input[type="checkbox"]:checked + label:before {
+              top: -4px;
+              left: -3px;
+              width: 12px;
+              height: 22px;
+              border-style: solid;
+              border-width: 2px;
+              border-color: transparent #00c851 #00c851 transparent;
+              -webkit-transform: rotate(40deg);
+              -ms-transform: rotate(40deg);
+              transform: rotate(40deg);
+              -webkit-transform-origin: 100% 100%;
+              -ms-transform-origin: 100% 100%;
+              transform-origin: 100% 100%; }
+
+            .form-dark .modal-header {
+                border-bottom: none;
+            }   
+        </style>
+    </head>
+
+    <body id="top-section" style="background: url('{{asset('img/bg.jpg') }}') no-repeat center">
+
+        <div class="container" style="margin-top:6em">
+           
+            <h1 class="font-weight-bold my-5 text-center">Espace de travail de l'école Lucie Aubrac<br/>Ayze (Haute-Savoie)</h1>
+
+            <!-- Card -->
+            <div class="card card-image z-depth-4" style="background-image: url('https://cdn.pixabay.com/photo/2013/07/25/13/01/stones-167089_960_720.jpg');">
+
+                <!-- Content -->
+                <div class="text-white rgba-stylish-strong py-5 px-5 z-depth-4">
+                    <div class="form-dark">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                {# <img src="{{ asset('img/company_logo.png') }}" alt="P2EA - Plateforme d'Echange de l'Ecole d'Ayze" class="img-fluid">                             #}
+                            </div>
+                            <div class="col-lg-9">
+                                <h3 class="card-title w-100 white-text font-weight-bold mb-4" id="myModalLabel"><strong>CONNEXION</strong> 
+                                    <a class="green-text font-weight-bold"><strong> SECURISEE</strong></a>
+                                </h3>
+                            </div>
+                        </div>
+                        
+                        {{ include('default/_flash_messages.html.twig') }}
+
+                        {% if error %}
+                        <div class="alert alert-danger">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        </div>
+                        {% endif %}
+                        
+                        <form action="{{ path('security_login') }}" method="post" class="text-center">
+                            <h4>Vous devez être connecté pour accéder à ce site.</h4>
+                            <div class="md-form mb-5">
+                                <label data-error="wrong" data-success="right" for="username">{{ 'label.username'|trans }}</label>
+                                <input type="text" id="username" name="_username" value="{{ last_username }}" class="form-control validate white-text"/>
+                            </div>
+
+                            <div class="md-form pb-3">
+                                <label data-error="wrong" data-success="right" for="password">{{ 'label.password'|trans }}</label>
+                                <input type="password" id="password" name="_password" class="form-control validate white-text" />
+
+                                <input type="hidden" name="_target_path" value="{{ app.request.get('redirect_to') }}"/>
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+                            </div>                            
+
+                            <!--Grid row-->
+                            <div class="row d-flex align-items-center mb-4">
+                                <!--Grid column-->
+                                <div class="text-center mb-3 col-md-12">
+                                    <button type="submit" class="btn btn-success btn-rounded z-depth-1">
+                                        <i class="fa fa-sign-in-alt" aria-hidden="true"></i> {{ 'action.sign_in'|trans }}
+                                    </button>
+                                </div>
+                                <!--Grid column-->
+                            </div>
+                            <!--Grid row-->
+                        </form>
+                        
+                    </div>
+                </div>
+
+            </div>
+            <!-- Card -->
+        </div>
+
+        <!--Footer-->
+        <footer class="page-footer text-center text-md-left fixed-bottom">
+            <!--Copyright-->
+            <div class="footer-copyright py-3 text-center">
+                <div class="container-fluid">
+                    © 2020 Copyright: Arnaud FOREL
+                </div>
+            </div>
+            <!--/.Copyright-->
+        </footer>
+        <!--/.Footer-->
+
+        <div class="fixed-action-btn smooth-scroll" id="scrollUp">
+            <a href="#top-section" class="btn-floating btn-large red">
+                <i class="fas fa-arrow-up"></i>
+            </a>
+        </div>
+
+        <!-- SCRIPTS -->
+      <!-- JQuery -->
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <!-- Bootstrap tooltips -->
+      <script type="text/javascript" src="{{ asset('js/popper.min.js') }}"></script>
+      <!-- Bootstrap core JavaScript -->
+      <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
+      <!-- MDB core JavaScript -->
+      <script type="text/javascript" src="{{ asset('js/mdb.min.js') }}"></script>
+
+      <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+
+      <!-- Initializations -->
+      <script type="text/javascript">
+        // Animations initialization
+        new WOW().init();
+
+        var $modal = $('.modal').show();
+      
+        $('#scrollUp').hide();
+       
+        $(window).scroll(function () {
+          if ($(this).scrollTop() > 300) {
+              $('#scrollUp').fadeIn('slow');
+          } else {
+              $('#scrollUp').fadeOut('slow');
+          }
+        });
+
+        window.cookieconsent.initialise({
+          "palette": {
+            "popup": {
+              "background": "#edeff5",
+              "text": "#838391"
+            },
+            "button": {
+              "background": "#4b81e8"
+            }
+          },
+          "content": {
+            "message": "Ce site utilise des cookies nécessaires à son fonctionnement.",
+            "dismiss": "J'ai compris",
+            "link": "Politique de confidentialité",
+            "href": "https://p2ea.info/politique de confidentialité.pdf"
+          }
+        });
+      </script>
+      {% block javascripts %}{% endblock %}
+      
+
+        {# it's not mandatory to set the timezone in localizeddate(). This is done to
+           avoid errors when the 'intl' PHP extension is not available and the application
+           is forced to use the limited "intl polyfill", which only supports UTC and GMT #}
+        <!-- Page rendered on {{ 'now'|format_datetime('long', 'long', locale='fr') }} -->
+    </body>
+</html>
+
+

@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+	{% if is_granted('ROLE_ADMIN')%}
+		<div class="accordion md-accordion accordion-1" id="accordionEx23" role="tablist">
+			<div class="card">
+				<div class="card-header" role="tab" id="heading96">
+					<h5 class="mb-0 py-1">
+						<a class="font-weight-bold" data-toggle="collapse" href="#collapse96" aria-expanded="true"
+						aria-controls="collapse96">
+						{% if edit == false %}
+							<h3><i class="fa fa-plus mr-2"></i> Ajouter une nouvelle catégorie</h3>
+						{% else %}
+							<h3><i class="fa fa-pen mr-2"></i> Modifier la catégorie</h3>
+						{% endif %}
+						</a>
+					</h5>
+				</div>
+				<div id="collapse96" class="collapse show" role="tabpanel" aria-labelledby="heading96" data-parent="#accordionEx23">
+					<div class="card-body">
+						<div class="row my-4">
+							<div class="col-md-12">
+								{{ form_start(form)}}
+		
+								{{ form_row(form.title, {'label': "Titre de la catégorie"})}}
+
+								{{ form_row(form.description, {'label': "Courte description (facultatif)"})}}
+
+								{{ form_row(form.image, {'label': "URL de l'image (facultatif)"})}}
+
+								<button type="submit" class="btn btn-success">Enregistrer</button>
+
+								{{ form_end(form)}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div> 
+		</div>
+		<!--Accordion wrapper-->
+		
+		<hr>
+	{% endif %}
+
+	<h3>Catégories</h3>
+    
+    <div class="row">
+	{% for category in categories %}
+		
+			<div class="col-md-4 mb-4">
+
+                    <!--Card-->
+                    <div class="card">
+
+                        <!--Card image-->
+                        <div class="view overlay">
+                            <img src="{{ asset(category.image)}}" class="card-img-top" alt="">
+                            <a href="{{ path('course_list', {'category': category.id})}}">
+                                <div class="mask flex-center rgba-black-strong text-white">
+                                	<i class="fas fa-eye fa-2x mr-2"></i>
+                                	Voir les cours de cette catégorie
+                                </div>
+                            </a>
+                        </div>
+                        <!--/.Card image-->
+
+                        <!--Card content-->
+                        <div class="card-body">
+                        <!--Title-->
+                            <h4 class="card-title"><strong>{{category.title}}</strong></h4>
+                            <hr>
+                            <!--Text-->
+                            <p class="card-text mb-3">{{ category.description }}</p>
+                            {% if is_granted('ROLE_ADMIN')%}
+                            <p class="card-text text-right">
+                            	<a href="{{ path('course_categoryEdit', {'id': category.id}) }}" class="btn btn-warning">
+                            		<i class="fa fa-pen mr-2"></i> Modifier
+                            	</a>
+                            </p>
+                        	{% endif %}
+                    		<p class="card-text text-right">
+                    			<a href="{{ path('course_newCat', {'category': category.id}) }}" class="btn btn-success">
+                    				<i class="fa fa-plus mr-2"></i> Ajouter un cours
+                    			</a>
+                    		</p>
+                        </div>
+                        <!--/.Card content-->
+
+                    </div>
+                    <!--/.Card-->
+                </div>
+                <!--Grid column-->
+	{% endfor %}
+	</div>
+
+{% endblock %}

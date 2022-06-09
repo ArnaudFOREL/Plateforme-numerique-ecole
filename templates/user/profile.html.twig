@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'user_profile' %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+            <!-- Section: Block Content -->
+            <section>
+
+                <!-- Card -->
+                <div class="card testimonial-card">
+
+                    <!-- Background color -->
+                    <div class="card-up card-image" style="background-image: url(https://cdn.pixabay.com/photo/2019/04/24/02/13/blossom-4151081_960_720.jpg); background-size: cover; height:200px">
+                        <div class="h-100 p-3 white-text text-right">
+                            <h2 class="font-weight-bold mb-0">{{ user.firstname}} {{ user.name}}</h2>
+                            <h4 class="mb-0">{% if user.classroom %}{{ user.classroom.name }}{% elseif is_granted('ROLE_ADMIN') %}Admin{% else %}Professeur{% endif %}</h4>
+                        </div>
+                    </div>
+
+                    <!-- Avatar -->
+                    <div class="avatar mx-auto white">
+                        <div class="view overlay">
+                            {% if user.avatar %}
+                                <img src="{{ asset('/users/'~ user.id ~'/'~ user.avatar) }}" class="rounded-circle" alt="avatar">
+                            {% else %}
+                                <img src="{{ asset('img/user.png') }}" alt="Default avatar">
+                            {% endif %}
+                            
+                            <a href="{{ path('user_avatar') }}">
+                                <div class="mask flex-center rgba-black-strong text-white">
+                                    <i class="fas fa-edit fa-2x mr-2"></i>
+                                    Modifier
+                                </div>
+                            </a>
+                        </div>
+                        
+                    </div>
+
+                    <!-- Content -->
+                    <div class="card-body px-3 py-4">
+                        <div class="row">
+                            <div class="col-4 text-center">
+                                <p class="small text-uppercase mb-0">Cours de la semaine terminés</p>
+                                <p class="font-weight-bold mb-0 count-up" data-from="0" data-to="{{ nbrFinish }}" data-time="2000">{{ nbrFinish }}</p>
+                            </div>
+                            <div class="col-4 text-center border-left border-right">
+                                <p class="small text-uppercase mb-0">Devoirs envoyés</p>
+                                <p class="font-weight-bold mb-0 count1" data-from="0" data-to="{{user.works|length}}" data-time="2000">{{user.works|length}}</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <p class="small text-uppercase mb-0">Progression de la semaine</p>
+                                <p class="font-weight-bold mb-0"><span class="d-flex justify-content-center"><span class="count2" data-from="0" data-to="{{ mid }}" data-time="2000">0</span> %</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Card -->
+
+            </section>
+            <!-- Section: Block Content -->
+        </div>
+    </div>
+
+    <div class="row my-5">
+        <div class="col-lg-12 z-depth-1">
+            <div class="section">
+                <h3 class="my-3">Informations</h3>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p>Nom utilisateur : {{ app.user.username }}</p>
+                        <p>Nom complet : {{ app.user.firstname }} {{ app.user.name}}</p>
+                        <p>Email : {{ app.user.email }}</p>
+                    </div>
+                    <div class="col-lg-6">
+                        <a href="{{ path('user_edit') }}" class="btn btn-link">
+                            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit_user'|trans }}
+                        </a>
+                        <hr>
+                        <a href="{{ path('user_change_password') }}" class="btn btn-link">
+                            <i class="fa fa-lock" aria-hidden="true"></i> {{ 'action.change_password'|trans }}
+                        </a>
+                        <hr>
+                        <a href="{{ path('user_avatar') }}" class="btn btn-link mb-4">
+                            <i class="fa fa-portrait" aria-hidden="true"></i> Modifier ma photo de profil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="{{ path('blog_index') }}" class="btn btn-info my-5 text-center">
+            <i class="fa fa-arrow-left" aria-hidden="true"></i> Retour au site
+        </a>
+        
+    </div>
+
+    
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    (function ($){
+      $.fn.counter = function() {
+        const $this = $(this),
+        numberFrom = parseInt($this.attr('data-from')),
+        numberTo = parseInt($this.attr('data-to')),
+        delta = numberTo - numberFrom,
+        deltaPositive = delta > 0 ? 1 : 0,
+        time = parseInt($this.attr('data-time')),
+        changeTime = 10;
+        
+        let currentNumber = numberFrom,
+        value = delta*changeTime/time;
+        var interval1;
+        const changeNumber = () => {
+          currentNumber += value;
+          //checks if currentNumber reached numberTo
+          (deltaPositive && currentNumber >= numberTo) || (!deltaPositive &&currentNumber<= numberTo) ? currentNumber=numberTo : currentNumber;
+          this.text(parseInt(currentNumber));
+          currentNumber == numberTo ? clearInterval(interval1) : currentNumber;  
+        }
+
+        interval1 = setInterval(changeNumber,changeTime);
+      }
+    }(jQuery));
+
+    $(document).ready(function(){
+
+      $('.count-up').counter();
+      $('.count1').counter();
+      $('.count2').counter();
+        
+      setTimeout(function () {
+        $('.count5').counter();
+      }, 3000);
+    });
+</script>
+{% endblock %}

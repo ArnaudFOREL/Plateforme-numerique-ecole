@@ -1,0 +1,248 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+<h2>
+	{% if category %}
+		Cours de la catégorie : <b>{{ category.title }}</b>
+	{% else %}
+		<div class="card transparent z-depth-1">
+			<h5 class="card-header h3">Mes cours</h5>
+			<div class="card-body">
+				<h5 class="card-title">Dans cet espace, tu retrouvera tous les cours de la semaine</h5>
+				<div class="row">
+					<p class="card-text col-md-6">
+						<span class="btn btn-floating peach-gradient"><i class="fa fa-exclamation fa-2x" aria-hidden="true"></i></span> Nouveau
+						<span class="btn btn-floating purple-gradient"><i class="fa fa-list fa-2x" aria-hidden="true"></i></span> En cours
+						<span class="btn btn-floating dusty-grass-gradient"><i class="fa fa-check fa-2x" aria-hidden="true"></i></span> Terminé
+					</p>
+					{% if is_granted('ROLE_TEACHER') and not category %}
+						<p class="card-text col-md-6 text-right">
+						{% if not finishCourses %}
+							<a href="{{ path('course_list_finish', {'finish': 'ViewFinish'}) }}" class="btn btn-info"><i class="fa fa-eye mr-2"></i>Voir les cours terminés</a>
+						{% else %}
+							<a href="{{ path('course_list') }}" class="btn btn-info"><i class="fa fa-eye-slash mr-2"></i>Cacher les cours terminés</a>
+						{% endif %}
+						</p>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	{% endif %}
+</h2>
+
+
+{% if courses or finishCourses %}
+<div class="row mt-5">
+	{% if courses %}
+		{% for course in courses %}
+			{% if course.courseObjects|length != 0 or is_granted('ROLE_TEACHER') %}
+			<div class="col-lg-3 col-md-6 mb-4">
+
+	                <!--Card-->
+	                <div class="card hoverable">
+						<h5 class="card-title p-3" style="height: 60px;"><strong>{{course.title}}</strong></h5>
+						<span class="btn btn-floating peach-gradient course-icon"><i class="fa fa-exclamation fa-2x" aria-hidden="true"></i></span>
+						{% for userCourse in app.user.userCourses %}
+                    		{% if userCourse.course == course %}
+                    			{% if userCourse.progress < 100 %}
+									<span class="btn btn-floating purple-gradient course-icon"><i class="fa fa-list fa-2x" aria-hidden="true"></i></span>
+                    			{% elseif userCourse.progress == 100 %}
+									<span class="btn btn-floating dusty-grass-gradient course-icon"><i class="fa fa-check fa-2x" aria-hidden="true"></i></span>
+	                    		{% endif %}
+	                    	{% endif %}
+                    	{% endfor %}
+	                    <!--Card image-->
+	                    <div class="view overlay">
+							{% if 'img/' in course.image or 'http' in course.image %}
+								<img src="{{ asset(course.image)}}" class="card-img-top" alt="Image du cours {{ course.title }}" height="250">
+							{% else %}
+								<img src="{{ asset('tasks/'~ course.id ~'/'~ course.image)}}" class="card-img-top" alt="Image du cours {{ course.title }}" height="250">
+							{% endif %}
+	                        {% if course.status > 0 or is_granted('ROLE_TEACHER') %}
+		                     	<a href="{{ path('course_show', {'id': course.id}) }}">
+		                            <div class="mask flex-center rgba-orange-strong text-white">
+		                            	<i class="fas fa-sign-in-alt fa-2x mr-2"></i>
+		                   				Entrer dans le cours
+		                            </div>
+		                        </a>
+		                    {% endif %}
+	                    </div>
+	                    <!--/.Card image-->
+
+	                    <!--Card content-->
+	                    <div class="card-body">
+	                    <!--Title-->
+	                    	{% if is_granted('ROLE_TEACHER') %}
+	                    		<h6 class="text-muted text-right"><i class="fa fa-user-tie mr-2"></i>Administrateur</h6>
+	                    	{% else %}
+								<h6 class="text-muted text-right"><i class="fa fa-graduation-cap mr-2"></i>Elève</h6>
+	                    	{% endif %}
+	                        
+	                        <!--Text-->
+	                        <p class="card-text my-3 text-dark">{{ course.description }}</p>
+							
+							{% if is_granted('ROLE_TEACHER') %}
+		                        <p class="card-text mb-3">
+		                        	Statut :
+		                        	{% if course.status == 0 %}
+		                        		<b class="text-warning">En construction</b>
+		                        	{% elseif course.status == 1 %}
+		                        		<b class="text-success">Disponible</b>
+		                        	{% else %}
+		                        		<b class="text-danger">Terminé</b>
+		                        	{% endif %}
+		                        </p>
+		                    {% endif %}
+	                        
+	                        <p class="card-text {% if is_granted('ROLE_TEACHER') %}text-right{% endif %}">
+	                        	{% if is_granted('ROLE_TEACHER') %}
+	                        		Date de début : <b>{{ course.startAt|format_datetime('long', 'none', '', 'UTC') }}</b> <br>
+	                        	{% endif %}
+	                        	Date de fin : <b>{{ course.endAt|format_datetime('long', 'none', '', 'UTC') }}</b>
+	                        </p>
+	                    	
+	                    	{% if course.classroom and is_granted('ROLE_TEACHER') %}
+	                		<p class="card-text text-right">
+								Disponible pour : <br>
+								{% for class in course.classroom %}
+								<b>{{ class.name }}</b>{% if not loop.last %}<br/>{% endif %}
+								{% endfor %}
+	                		</p>
+	                        {% endif %}
+
+	                        <p class="card-text">
+	                        	<div class="row">
+		                        	<div class="col-lg-6">
+		                        		{% if is_granted('ROLE_TEACHER') %}
+				                        	<a href="{{ path('course_edit', {'id': course.id}) }}" class="btn btn-outline-primary">
+				                        		<i class="fa fa-edit"></i> éditer
+				                        	</a>
+				                        {% endif %}
+		                        	</div>
+		                        	<div class="col-lg-6 text-right">
+		                        		{% if course.status > 0 or is_granted('ROLE_TEACHER') %}
+			                        		<a href="{{ path('course_show', {'id': course.id}) }}" class="btn btn-success">
+					                        	<i class="fa fa-sign-in-alt mr-1"></i> Entrer
+		                        			</a>
+			                        	{% endif %}
+		                        	</div>
+		                        </div>
+	                        </p>
+	                    </div>
+	                    <!--/.Card content-->
+
+	                </div>
+	                <!--/.Card-->
+	            </div>
+	            <!--Grid column-->
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+	
+	{% if finishCourses %}
+		{% for course in finishCourses %}
+			
+			<div class="col-lg-3 col-md-6 mb-4">
+
+	                <!--Card-->
+	                <div class="card hoverable">
+						<h5 class="card-title p-3" style="height: 60px;"><strong>{{course.title}}</strong></h5>
+
+	                    <!--Card image-->
+	                    <div class="view overlay">
+	                        {% if 'img/' in course.image or 'http' in course.image %}
+								<img src="{{ asset(course.image)}}" class="card-img-top" alt="Image du cours {{ course.title }}" height="250">
+							{% else %}
+								<img src="{{ asset('tasks/'~ course.id ~'/'~ course.image)}}" class="card-img-top" alt="Image du cours {{ course.title }}" height="250">
+							{% endif %}
+	                        <a href="{{ path('course_show', {'id': course.id}) }}">
+	                            <div class="mask flex-center rgba-orange-strong text-white">
+	                            	<i class="fas fa-sign-in-alt fa-2x mr-2"></i>
+	                   				Entrer dans le cours
+	                            </div>
+	                        </a>
+	                    </div>
+	                    <!--/.Card image-->
+
+	                    <!--Card content-->
+	                    <div class="card-body">
+	                    <!--Title-->
+	                        {% if is_granted('ROLE_TEACHER') %}
+	                    		<h6 class="text-muted text-right"><i class="fa fa-user-tie mr-2"></i>Administrateur</h6>
+	                    	{% else %}
+								<h6 class="text-muted text-right"><i class="fa fa-graduation-cap mr-2"></i>Elève</h6>
+	                    	{% endif %}
+	                        <!--Text-->
+	                        <p class="card-text mb-3">{{ course.description }}</p>
+							
+	                        <p class="card-text mb-3">
+	                        	Statut :
+	                        	{% if course.status == 0 %}
+	                        		<b class="text-warning">En construction</b>
+	                        	{% elseif course.status == 1 %}
+	                        		<b class="text-success">Disponible</b>
+	                        	{% else %}
+	                        		<b class="text-danger">Terminé</b>
+	                        	{% endif %}
+	                        </p>
+	                        
+	                        <p class="card-text {% if is_granted('ROLE_TEACHER') %}text-right{% endif %}">
+	                        	{% if is_granted('ROLE_TEACHER') %}
+	                        		Date de début : <b>{{ course.startAt|format_datetime('long', 'none', '', 'UTC') }}</b> <br>
+	                        	{% endif %}
+	                        	Date de fin : <b>{{ course.endAt|format_datetime('long', 'none', '', 'UTC') }}</b>
+	                        </p>
+	                    	
+	                    	{% if course.classroom and is_granted('ROLE_TEACHER') %}
+	                		<p class="card-text text-right">
+	                			Disponible pour : <br>
+	                			<b>{{ course.classroom.name }}</b>
+	                		</p>
+	                        {% endif %}
+
+	                        <p class="card-text">
+	                        	<div class="row">
+		                        	<div class="col-lg-6">
+		                        		{% if is_granted('ROLE_TEACHER') %}
+				                        	<a href="{{ path('course_edit', {'id': course.id}) }}" class="btn btn-outline-primary">
+				                        		<i class="fa fa-edit"></i> éditer
+				                        	</a>
+				                        {% endif %}
+		                        	</div>
+		                        	<div class="col-lg-6 text-right">
+		                        		<a href="{{ path('course_show', {'id': course.id}) }}" class="btn btn-success">
+		                        			<i class="fa fa-sign-in-alt mr-1"></i> Entrer
+		                        		</a>
+		                        	</div>
+		                        </div>
+	                        </p>
+	                    </div>
+	                    <!--/.Card content-->
+
+	                </div>
+	                <!--/.Card-->
+	            </div>
+	            <!--Grid column-->
+
+		{% endfor %}
+	{% endif %}
+</div>	
+<div class="pagination mt-4">
+    {{ knp_pagination_render(courses) }}
+</div>
+{% if category %}
+	<div class="row">
+		<div class="col-lg-12 text-center my-4">
+			<a href="{{ path('course_category') }}" class="btn btn-warning">Retour à la liste des catégories'</a>
+		</div>
+	</div>
+{% endif %}
+{% else %}
+<div class="row">
+	<div class="col-lg-12 text-center my-4">
+		<h3>Aucun cours disponible.</h3>
+		<a href="{{ path('homepage') }}" class="btn btn-warning">Retour à l'accueil'</a>
+	</div>
+</div>
+{% endif %}
+{% endblock %}

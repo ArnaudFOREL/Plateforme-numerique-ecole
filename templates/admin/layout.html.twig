@@ -1,0 +1,51 @@
+{#
+   This is the base template of the all backend pages. Since this layout is similar
+   to the global layout, we inherit from it to just change the contents of some
+   blocks. In practice, backend templates are using a three-level inheritance,
+   showing how powerful, yet easy to use, is Twig's inheritance mechanism.
+   See https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts
+#}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('admin') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('admin') }}
+{% endblock %}
+
+{% block header_navigation_links %}
+    <li class="nav-item">
+        <a href="{{ path('blog_index') }}" class="nav-link waves-effect">
+            <i class="fa fa-home" aria-hidden="true"></i> Retour au site
+        </a>
+    </li>
+
+    <li class="dropdown nav-item">
+        <a href="#" class="dropdown-toggle nav-link waves-effect" data-toggle="dropdown" role="button" aria-expanded="false" id="new" title="Créer">
+            Créer <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu user" role="menu" aria-labelledby="new">
+            <li>
+                <a href="{{ path('course_new') }}">
+                    Nouveau cours
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a href="{{ path('admin_post_new') }}">
+                    {{ 'action.create_post'|trans }}
+                </a>
+            </li>
+        </ul>
+    </li>
+    
+    <li class="nav-item">
+        <a href="{{ path('admin_post_index') }}" class="nav-link waves-effect">
+            <i class="fa fa-cogs" aria-hidden="true"></i> Accueil admin
+        </a>
+    </li>
+{% endblock %}

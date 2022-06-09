@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+
+{% block main %}
+	<!--Section: Content-->
+	<section class="dark-grey-text p-5">
+
+		<!-- Grid row -->
+		<div class="row">
+
+			<!-- Grid column -->
+			<div class="col-md-5 mb-4 mb-md-0">
+
+				<div class="view">
+					<img src="https://mdbootstrap.com/img/illustrations/undraw_Group_chat_unwm.svg" class="img-fluid" alt="smaple image">
+				</div>
+
+			</div>
+			<!-- Grid column -->
+
+			<!-- Grid column -->
+			<div class="col-md-7 mb-lg-0 mb-4">
+
+				<!-- Section heading -->
+				<h3 class="font-weight-bold my-3">Rendre mes travaux</h3>
+
+				<p class="text-muted mb-4 pb-2">Tu peux nous envoyer tes travaux en utilisant cet outil et nous laisser un message pour les accompagner. Nous pourrons te répondre directement.</p>
+				
+				{% if not is_granted('ROLE_TEACHER') %}
+					{{ form_start(form)}}
+
+					{{ form_row(form.subject, {'label': "Commence par renseigner un sujet :"}) }}
+
+					<small class="form-text black-text mb-5"><strong>Par exemple: "Travaux de lundi et mardi de John" ou "Exercice de numération Jean"</strong></small>
+					
+					<a href="{{ path('course_list') }}" class="btn btn-secondary"><i class="fa fa-chevron-left mr-2"></i>Retour</a>
+					<button type="submit" class="btn btn-success">Continuer vers l'envoi des documents <i class="fa fa-paper-plane"></i></button>
+
+					{{ form_end(form)}}		
+				{% else %}	
+					<p class="form-text black-text mb-5">Désolé, mais en tant qu'administrateur, vous ne pouvez pas déposer de travaux.</p>
+					<a href="{{ path('admin_index') }}" class="btn btn-primary">Aller au panel d'administration</a>
+				{% endif %}	
+
+			</div>
+			<!-- Grid column -->
+
+		</div>
+		<!-- Grid row -->
+
+	</section>
+	<!--Section: Content-->
+
+	
+{% endblock %}

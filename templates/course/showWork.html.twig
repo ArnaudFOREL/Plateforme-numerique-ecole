@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'course_show_work' %}
+
+{% block stylesheets %}
+<style>
+    .my-custom-scrollbar {
+    position: relative;
+    height: 250px;
+    overflow: auto;
+    }
+    .card-img-35 {
+    width: 35px;
+    }
+    .mt-3p {
+    margin-top: 3px;
+    }
+    
+</style>
+    
+{% endblock %}
+
+{% block main %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 col-lg-12 mx-auto">
+
+            <!-- Section: Block Content -->
+            <section>
+
+                <div class="card card-list">
+                    <div class="card-header d-flex justify-content-between align-items-center py-3">
+                        <div class="d-flex justify-content-start align-items-center">
+                            {% if work.user.avatar %}
+                            <img src="{{ asset('/users/'~ work.user.id ~'/'~ work.user.avatar) }}" class="z-depth-1 rounded-circle" width="45" alt="avatar image">
+                            {% else %}
+                                <img src="{{ asset('img/user.png') }}" class="z-depth-1 rounded-circle" width="45" alt="Default avatar">
+                            {% endif %}
+                            <div class="d-flex flex-column pl-3">
+                                <a href="#!" class="font-weight-normal mb-0">{{ work.user.firstname }} {{ work.user.name }} - {{ work.subject }} </a>
+                                <p class="small text-muted mb-0">Rendu le {{ work.postAt|format_datetime('full', 'short', locale='fr')}}</p>
+                            </div>
+                        </div>
+                        {% if work.isRead == 0 %}
+                        <div class="d-flex justify-content-end align-items-center">
+                            <div class="d-flex flex-column">
+                               <a href="{{ path('course_editWork', {work: work.id}) }}" class="btn btn-outline-info">Editer mes fichiers <i class="fa fa-edit"></i></a> 
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="d-flex justify-content-end align-items-center">
+                            <div class="d-flex flex-column">
+                               <p><i class="fa fa-check text-success"></i> Lu</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        {% for file in work.files %}
+                        <div class="media d-block d-md-flex mt-4 grey {% if app.request.cookies.get('darkMode') == 0 %} lighten-4 {% endif %} p-2">
+                            {% if 'image' in file.filetype %}
+                                <i class="far fa-file-image fa-5x d-flex mx-auto media-image z-depth-1"></i>
+                                <div class="media-body text-center text-md-left ml-md-3 ml-0">
+                                    <h5 class="mt-1 font-weight-normal"><a href="{{asset('works/'~ work.user.id ~'/'~ file.name ) }}">{{ file.name }}</a></h5>
+                                    Fichier image
+                                    ({{ file.filetype }})
+                                </div>
+                            {% elseif 'pdf' in file.filetype %}
+                                <i class="far fa-file-pdf fa-5x d-flex mx-auto media-image z-depth-1"></i>
+                                <div class="media-body text-center text-md-left ml-md-3 ml-0">
+                                    <h5 class="mt-1 font-weight-normal"><a href="{{asset('works/'~ work.user.id ~'/'~ file.name ) }}">{{ file.name }}</a></h5>
+                                    Fichier PDF
+                                    ({{ file.filetype }})
+                                </div>
+                            {% elseif 'stream' in file.filetype %}
+                                <i class="far fa-file-audio fa-5x d-flex mx-auto media-image z-depth-1"></i>
+                                <div class="media-body text-center text-md-left ml-md-3 ml-0">
+                                    <h5 class="mt-1 font-weight-normal"><a href="{{asset('works/'~ work.user.id ~'/'~ file.name ) }}">{{ file.name }}</a></h5>
+                                    Fichier audio
+                                    ({{ file.filetype }})
+                                </div>
+                            {% elseif 'video' in file.filetype %}
+                                <i class="far fa-file-video fa-5x d-flex mx-auto media-image z-depth-1"></i>
+                                <div class="media-body text-center text-md-left ml-md-3 ml-0">
+                                    <h5 class="mt-1 font-weight-normal"><a href="{{asset('works/'~ work.user.id ~'/'~ file.name ) }}">{{ file.name }}</a></h5>
+                                    Fichier vidéo
+                                    ({{ file.filetype }})
+                                </div>
+                            {% else %}
+                                <i class="far fa-file fa-5x d-flex mx-auto media-image z-depth-1"></i>
+                                <div class="media-body text-center text-md-left ml-md-3 ml-0">
+                                    <h5 class="mt-1 font-weight-normal"><a href="{{asset('works/'~ work.user.id ~'/'~ file.name ) }}">{{ file.name }}</a></h5>
+                                    Fichier 
+                                    ({{ file.filetype }})
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="p-2">
+                        <!-- Section: Block Content -->
+                        <section>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    {% for comment in work.comments %}
+                                        {% if comment.user == work.user %}
+                                            <div class="media mt-3">
+                                                <div class="media-body">
+                                                    <p class="mt-0 font-weight-bold small mb-1"><span class="text-muted small mt-3p">Le {{ comment.postAt|format_datetime('full', 'short', locale='fr')}}</span><span class="float-right {% if "ROLE_TEACHER" in comment.user.roles %}text-warning{% endif %}">{{ comment.user.firstname}}</span></p>
+                                                    <div class="mb-0 font-weight-light small primary-color text-white p-2 rounded">{{ comment.comment|raw }}</div>
+                                                </div>
+                                                {% if comment.user.avatar %}
+                                                    <img src="{{ asset('/users/'~ comment.user.id ~'/'~ comment.user.avatar) }}" class="avatar rounded-circle card-img-35 z-depth-1 d-flex ml-3" alt="avatar image">
+                                                {% else %}
+                                                    <img src="{{ asset('img/user.png') }}" class="avatar rounded-circle card-img-35 z-depth-1 d-flex ml-3"alt="Default avatar">
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            <div class="media mt-3">
+                                                {% if comment.user.avatar %}
+                                                    <img src="{{ asset('/users/'~ comment.user.id ~'/'~ comment.user.avatar) }}" class="avatar rounded-circle card-img-35 z-depth-1 d-flex mr-3" alt="avatar image">
+                                                {% else %}
+                                                    <img src="{{ asset('img/user.png') }}" class="avatar rounded-circle card-img-35 z-depth-1 d-flex mr-3"alt="Default avatar">
+                                                {% endif %}
+                                                <div class="media-body">
+                                                    <p class="mt-0 font-weight-bold small mb-1 {% if "ROLE_TEACHER" in comment.user.roles %}text-warning{% endif %}">{{ comment.user.firstname}}<span class="text-muted float-right small mt-3p">Le {{ comment.postAt|format_datetime('full', 'short', locale='fr')}}</span></p>
+                                                    <div class="mb-0 font-weight-light small grey {% if app.request.cookies.get('darkMode') == 0 %} lighten-2 {% endif %} p-2 rounded">{{ comment.comment|raw }}</div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        Aucun commentaire n'a été trouvé.
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+
+                        </section>
+                        <!-- Section: Block Content -->
+                    </div>
+                    <div class="card-footer mb-3">
+                        <div class="form-group mb-0">
+                            {{ form_start(form) }}
+                            {{ form_row(form.comment, {'label': 'Ajouter une réponse :'}) }}
+                            <div class="text-right pt-2">
+                                <button type="submit" class="btn btn-primary mb-0 mr-0">
+                                    <i class="fa fa-paper-plane mr-2"></i>Envoyer
+                                </button>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Section: Block Content -->
+        </div>
+        <a href="{{ path('course_listWorks') }}" class="btn btn-secondary"><i class="fa fa-chevron-left mr-2"></i>Retour</a>
+    </div>
+</div>
+    
+{% endblock %}
+
+

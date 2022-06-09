@@ -1,0 +1,7 @@
+{{ include('blog/_delete_post_confirmation.html.twig') }}
+<form method="post" action="{{ path('admin_post_delete', {id: post.id}) }}" style="display:inline-block" onsubmit="return confirm('Supprimer cette annonce ?')" title="Supprimer">
+    <input type="hidden" name="_method" value="post">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
+    <button class="btn btn-outline-danger btn-sm"><span class="far fa-trash-alt"></span></button>
+</form>
+

@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'blog_post_show' %}
+
+{% block main %}
+<div class="row">
+    <h1>{{ post.title }}</h1>
+    {% if is_granted('edit', post) %}
+        <div class="section ml-5">
+            <a class="btn btn-md btn-success" href="{{ path('admin_post_edit', {id: post.id}) }}">
+                <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit_post'|trans }}
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+    <!--Main layout-->
+    {# <main class="mt-5 pt-5"> #}
+        {# <div class="container"> #}
+
+            <!--Section: Post-->
+            <section class="mt-4">
+
+                <!--Grid row-->
+                <div class="row">
+
+                    <!--Grid column-->
+                    <div class="col-md-8 mb-4">
+
+                        <!--Featured Image-->
+                        <div class="card mb-4 wow fadeIn">
+
+                            <img src="{{ asset('/img/exter.jpg') }}" class="img-fluid" alt="">
+
+                        </div>
+                        <!--/.Featured Image-->
+
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-md-4 mb-4">
+
+                        <!--Card: Jumbotron-->
+                        <div class="card blue-gradient mb-4 wow fadeIn">
+
+                            <!-- Content -->
+                            <div class="card-body text-white text-center">
+                                
+                                <h4 class="mb-4">
+                                    <strong><i class="fa fa-user"></i> {{ post.author.fullName }}</strong>
+                                </h4>
+                                <p>
+                                    <strong><i class="fa fa-calendar"></i> Le {{ post.publishedAt|format_datetime('medium', 'short', locale='fr') }}</strong>
+                                </p>
+                            </div>
+                            <!-- Content -->
+                        </div>
+                        <!--Card: Jumbotron-->
+
+                    </div>
+                    <!--Grid column-->
+
+                </div>
+                <!--Grid row-->
+                
+                        <!--Card-->
+                        <div class="card mb-4 wow fadeIn">
+
+                            <!--Card content-->
+                            <div class="card-body">
+
+                                <p class="h5 my-4">{{ post.summary }}</p>
+
+                                {{ post.content|md2html }}
+
+                                {{ include('blog/_post_tags.html.twig') }}
+                            </div>
+
+                        </div>
+                        <!--/.Card-->
+
+                        <!--Comments-->
+                        <div class="card card-comments mb-3 wow fadeIn">
+                            <div class="card-header font-weight-bold">
+                                <i class="fa fa-comments" aria-hidden="true"></i> {{ 'post.num_comments'|trans({ 'count': post.comments|length }) }}
+                           </div>
+                            <div class="card-body">
+                                {% for comment in post.comments %}
+                                    <div class="post-comment z-depth-1 p-2 rounded mb-4">
+                                        <div class="media d-block d-md-flex mt-3">
+                                            {# <img class="d-flex mb-3 mx-auto " src="https://mdbootstrap.com/img/Photos/Avatars/img (30).jpg" alt="Generic placeholder image"> #}
+                                            <div class="media-body ml-0">
+                                                <h5 class="mt-0 mb-5 font-weight-bold">
+                                                    {{ comment.author.fullName }}
+                                                    <small><i>{{ 'post.commented_on'|trans }} {{ comment.publishedAt|format_datetime('medium', 'short', locale='fr') }}</i></small>
+                                                </h5>
+                                                {{ comment.content|md2html }}
+                                            </div>
+                                        </div>
+                                        <a name="comment_{{ comment.id }}"></a>
+                                        
+                                    </div>
+                                {% else %}
+                                    <div class="post-comment">
+                                        <p>{{ 'post.no_comments'|trans }}</p>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                        <!--/.Comments-->
+
+                        <!--Reply-->
+                        <div class="card mb-3 wow fadeIn">
+                            <div class="card-header font-weight-bold">Laisser un commentaire</div>
+                            <div class="card-body">
+                                <div id="post-add-comment" class="well">
+                                    {# The 'IS_AUTHENTICATED_FULLY' role ensures that the user has entered
+                                    their credentials (login + password) during this session. If they
+                                    are automatically logged via the 'Remember Me' functionality, they won't
+                                    be able to add a comment.
+                                    See https://symfony.com/doc/current/security/remember_me.html#forcing-the-user-to-re-authenticate-before-accessing-certain-resources
+                                    #}
+                                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                        {{ render(controller('App\\Controller\\BlogController::commentForm', {'id': post.id})) }}
+                                    {% else %}
+                                        <p>
+                                            <a class="btn btn-success" href="{{ path('security_login', {'redirect_to': app.request.pathInfo}) }}">
+                                                <i class="fa fa-sign-in" aria-hidden="true"></i> {{ 'action.sign_in'|trans }}
+                                            </a>
+                                            {{ 'post.to_publish_a_comment'|trans }}
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <!--/.Reply-->
+
+
+                
+
+            </section>
+            <!--Section: Post-->
+
+        {# </div> #}
+    {# </main> #}
+    <!--Main layout-->
+
+{% endblock %}
+
+

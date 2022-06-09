@@ -1,0 +1,383 @@
+{#
+   This is the base template used as the application layout which contains the
+   common elements and decorates all the other templates.
+   See https://symfony.com/doc/current/templates.html#template-inheritance-and-layouts
+#}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>{% block title %}Ecole d'Ayse (Haute Savoie - 74){% endblock %}</title>
+        <link rel="shortcut icon" href="{{ asset('favicon.ico')}}">
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/f180c2c395.js" crossorigin="anonymous"></script>
+        <!-- Bootstrap core CSS -->
+       <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+        <!-- Material Design Bootstrap -->
+        <link href="{{ asset('css/mdb.css') }}" rel="stylesheet">
+        <!-- Your custom styles (optional) -->
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,700|Roboto|Kaushan+Script&display=swap" rel="stylesheet"> 
+        <link href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" rel="stylesheet">
+        {% block stylesheets %}{% endblock %}
+        <style>
+           .double-nav .breadcrumb-dn {
+              color: #fff;
+            } 
+        </style>
+    </head>
+
+    <body id="{% block body_id %}{% endblock %}" class="fixed-sn light-blue-skin">
+
+        {% block header %}
+        <header id="top-section">
+            <!-- Sidebar navigation -->
+            <div id="slide-out" class="side-nav sn-bg-4 fixed">
+                <ul class="custom-scrollbar">
+                    <!-- Logo -->
+                    <li>
+                        <div class="logo-wrapper waves-light">
+                            <a class="navbar-brand flex-center waves-effect" href="{{ path('homepage')}}">
+                                <img src="{{ asset('img/company_logo.png') }}" alt="Environnement de travail numérique AYZE" class="img-fluid">
+                            </a>
+                        </div>
+                    </li>
+                    <!--/. Logo -->
+                    <hr>
+                    <!-- Side navigation links -->
+                    <li>
+                        Liens utiles
+                        <ul class="collapsible collapsible-accordion">
+                            <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-calculator"></i> Mathématiques<i class="fas fa-angle-down rotate-icon"></i></a>
+                                <div class="collapsible-body">
+                                    <ul class="list-unstyled">
+                                        <li><a href="https://calculatice.ac-lille.fr/spip.php?rubrique2" target="blank" class="waves-effect">Calcul@tice</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-feather-alt"></i> Correction des dictées<i class="fas fa-angle-down rotate-icon"></i></a>
+                                <div class="collapsible-body">
+                                    <ul class="list-unstyled">
+                                        <li><a href="{{ asset('fram-p2ea.html') }}" target="blank" class="waves-effect">Le pad</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-book"></i> Lecture<i class="fas fa-angle-down rotate-icon"></i></a>
+                                <div class="collapsible-body">
+                                    <ul class="list-unstyled">
+                                        <li><a href="https://ecole.cned.fr/login/index.php" target="blank" class="waves-effect">Ma classe à la maison</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                        <hr>
+                        Mes documents
+                        <ul class="collapsible collapsible-accordion">
+                            <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-file-signature"></i> Devoirs<i class="fas fa-angle-down rotate-icon"></i></a>
+                                <div class="collapsible-body">
+                                    <ul class="list-unstyled">
+                                        <li><a href="{{ path('course_works') }}" class="waves-effect"><i class="fa fa-paper-plane"></i> Envoyer mes devoirs</a></li>
+                                        <li><a href="{{ path('course_listWorks')}}" class="waves-effect"><i class="fa fa-eye"></i> Voir mes devoirs rendus</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--/. Side navigation links -->
+                </ul>
+                <div class="sidenav-bg mask-strong"></div>
+            </div>
+            <!--/. Sidebar navigation -->
+
+            <nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav text-white">
+                <!-- SideNav slide-out button -->
+                <div class="float-left">
+                    <a href="#" data-activates="slide-out" class="button-collapse"><i class="fas fa-bars"></i></a>
+                </div>
+                <!-- Breadcrumb-->
+                <div class="breadcrumb-dn mr-auto ml-3">
+                    Environnement de travail numérique de l'Ecole d'Ayze
+                </div>
+                <ul class="nav navbar-nav nav-flex-icons ml-auto">
+                    <li class="nav-item">
+                        <div class="switch">
+                            <label>
+                                <i class="fa fa-adjust"></i> Mode sombre
+                                <input type="checkbox" id="darkmode" {% if app.request.cookies.get('darkMode') == 1 %} checked {% endif %}>
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </li> 
+                {% block header_navigation_links %}
+                    <li class="nav-item">
+                        <a href="{{ path('blog_index') }}" class="nav-link waves-effect">
+                          <i class="fa fa-home" aria-hidden="true"></i> {{ 'menu.homepage'|trans }}
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="{{ path('course_list') }}" class="nav-link waves-effect">
+                            <i class="fa fa-graduation-cap" aria-hidden="true"></i> {{ 'menu.mycourse'|trans }}
+                        </a>
+                    </li>
+
+                    {% if is_granted('ROLE_TEACHER') %}
+                        <li class="nav-item">
+                            <a href="{{ path('admin_post_index') }}" title="Admin" class="nav-link waves-effect">
+                                <i class="fa fa-cogs" aria-hidden="true"></i> {{ 'menu.admin'|trans }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endblock %}
+
+                        <!-- ICON -->
+                        <div class="dropdown nav-button notifications-button hidden-sm-down">
+
+                            <a class="btn btn-email btn-sm dropdown-toggle" href="#" id="notifications-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-bell"></i>
+                            </a>
+                            
+                            {% set nbNotif = 0 %}
+                            {% for notif in app.user.notifications %}
+                                {% if notif.isRead == 0 %}
+                                    {% set nbNotif = nbNotif + 1 %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if nbNotif > 0 %}
+                                <span class="badge badge-danger counter">{{ nbNotif }}</span>
+                            {% endif %}
+
+                            <!-- NOTIFICATIONS -->
+                            <div class="dropdown-menu notification-dropdown-menu" aria-labelledby="notifications-dropdown">
+                                <h6 class="dropdown-header">5 dernières notifications</h6>
+
+                                <div id="notificationsContainer" class="notifications-container">
+                                    {% for notif in app.user.notifications|sort((a,b) => a.postAt < b.postAt)[:5] %}
+                                    <a class="dropdown-item dropdown-notification" {% for work in notif.work %}href="{% if is_granted('ROLE_TEACHER') %}{{path('admin_showWork', {work: work.id}) }}{% else %}{{path('course_showWork', {work: work.id}) }}{% endif %}"{% endfor %}>
+                                        {# <div class="notification-read">
+                                            <i class="fa fa-times" aria-hidden="true"></i>
+                                        </div> #}
+                                        <div class="notification-img">
+                                            {% if notif.type == 0 %}
+                                                {% if notif.isRead == 0 %}
+                                                    <i class="fas fa-folder text-warning"></i>
+                                                {% else %}
+                                                    <i class="far fa-folder-open text-warning"></i>
+                                                {% endif %}
+                                            {% elseif notif.type == 1 %}
+                                                {% if notif.isRead == 0 %}
+                                                    <i class="fas fa-envelope text-info"></i>
+                                                {% else %}
+                                                    <i class="far fa-envelope-open text-info"></i>
+                                                {% endif %}
+                                            {% elseif notif.type == 3 %}
+                                                <i class="fas fa-check-circle text-success"></i>
+                                            {% endif %}
+                                        </div>
+                                        <div class="notifications-body">
+                                            <p class="notification-texte text-dark">
+                                                {% if notif.isRead == 0 %}<b class="font-weight-bold">{{ notif.typeOfType }}</b>{% else %}{{ notif.typeOfType }}{% endif %}<br/>
+                                                {% for work in notif.work %}
+                                                    <small>
+                                                        <b class="font-weight-bold">
+                                                        {% if is_granted('ROLE_TEACHER') %}
+                                                            {{ work.user.firstname }} {{ work.user.name }} : 
+                                                        {% else %}
+                                                            Nom :
+                                                        {% endif %}
+                                                        </b>
+                                                    {{ work.subject }}
+                                                    </small>
+                                                {% endfor %}
+                                            </p>
+                                            <p class="notification-date text-muted small">
+                                                <i class="fa fa-clock" aria-hidden="true"></i> {{ notif.PostAt|format_datetime('long', 'short', locale='fr')}}
+                                            </p>
+                                        </div>
+                                    </a>
+                                    {% else %}
+                                        <a id="notificationAucune" class="dropdown-item dropdown-notification" href="#">
+                                          <p class="notification-solo text-center text-dark">Aucune nouvelle notification</p>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+
+                                <!-- TOUTES -->
+                                {# <a class="dropdown-item dropdown-notification-all" href="#">
+                                  <i class="fa fa-eye"></i> Voir toutes les notifications
+                                </a> #}
+
+                            </div>
+
+                        </div>
+                   
+
+                    <li class="dropdown nav-item">
+                        <a href="#" class="dropdown-toggle nav-link waves-effect" data-toggle="dropdown" role="button" aria-expanded="false" id="user" title="Mon compte">
+                            {{ app.user.firstname }} {% if app.user.avatar %}<img src="{{ asset('users/'~ app.user.id ~'/'~ app.user.avatar) }}" class="rounded-circle" height="20">{% else %}<i class="fa fa-user" aria-hidden="true"></i>{% endif %}
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu user" role="menu" aria-labelledby="user">
+                            <li>
+                                <a href="{{ path('user_profile') }}" class="dropdown-item">
+                                    <i class="fa fa-edit" aria-hidden="true"></i> {{ 'menu.user'|trans }}
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="{{ path('security_logout') }}" class="dropdown-item">
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i> {{ 'menu.logout'|trans }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        <!-- Navbar -->
+    </header>
+    {% endblock %}
+
+    <!--Main layout-->
+    <main>
+
+      <div class="container-fluid">    
+    
+            {% block body %}
+                <div class="row">
+                    <div id="main" class="col-lg-12">
+                        {{ include('default/_flash_messages.html.twig') }}
+
+                        {% block main %}{% endblock %}
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    </main>
+    <!--/Main layout-->
+
+    {% block footer %}
+        <!--Footer-->
+        <footer class="page-footer text-center text-md-left">
+            <!--Copyright-->
+            <div class="footer-copyright py-3 text-center">
+                <div class="container-fluid">
+                    © 2020 Copyright: Arnaud FOREL
+                </div>
+            </div>
+            <!--/.Copyright-->
+        </footer>
+        <!--/.Footer-->
+    {% endblock %}
+
+    <div class="fixed-action-btn smooth-scroll" id="scrollUp">
+        <a href="#top-section" class="btn-floating btn-large red">
+            <i class="fas fa-arrow-up"></i>
+        </a>
+    </div>
+
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="{{ asset('js/popper.min.js') }}"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="{{ asset('js/mdb.min.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('js/addons-pro/stepper.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+
+      <!-- Initializations -->
+      <script type="text/javascript">
+        // SideNav Initialization
+        $(".button-collapse").sideNav();
+        // Animations initialization
+        new WOW().init();
+      
+        $('#scrollUp').hide();
+
+        if($("#darkmode").is(":checked")){
+            $("body").addClass('dark-mode');
+            $("body").removeClass('light-blue-skin');
+            $("body").addClass('black-skin');
+            $("img").css('filter', 'grayscale(45%)');
+            $(".card").addClass('elegant-color');
+            document.cookie = "darkMode=1;path=/";
+        } else {
+            document.cookie = "darkMode=0;path=/";
+        }
+       
+        $(window).scroll(function () {
+          if ($(this).scrollTop() > 300) {
+              $('#scrollUp').fadeIn('slow');
+          } else {
+              $('#scrollUp').fadeOut('slow');
+          }
+        });
+
+        $(document).ready(function() {
+            $('.mdb-select').materialSelect();
+            $('.datepicker').pickadate({
+                monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre',
+                'Novembre', 'Décembre'],
+                weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                today: 'aujourd\'hui',
+                clear: 'effacer',
+                formatSubmit: 'yyyy-mm-dd 00:00:00',
+                firstDay: 1,
+                closeOnSelect: true
+            });
+        });
+
+        $('#darkmode').click(function() {
+            if($("#darkmode").is(":checked")){
+                $("body").addClass('dark-mode');
+                $("body").removeClass('light-blue-skin');
+                $("body").addClass('black-skin');
+                $("img").css('filter', 'grayscale(45%)');
+                $(".card").addClass('elegant-color');
+                document.cookie = "darkMode=1;path=/";
+            } else {
+                $("body").removeClass('dark-mode');
+                $("body").addClass('light-blue-skin');
+                $("body").removeClass('black-skin');
+                $("img").css('filter', '');
+                $(".card").removeClass('elegant-color');
+                document.cookie = "darkMode=0;path=/";
+            }
+        });
+
+        window.cookieconsent.initialise({
+          "palette": {
+            "popup": {
+              "background": "#edeff5",
+              "text": "#838391"
+            },
+            "button": {
+              "background": "#4b81e8"
+            }
+          },
+          "content": {
+            "message": "Ce site utilise des cookies nécessaires à son fonctionnement.",
+            "dismiss": "J'ai compris",
+            "link": "Politique de confidentialité",
+            "href": "https://p2ea.info/politique de confidentialité.pdf"
+          }
+        });
+      </script>
+      {% block javascripts %}{% endblock %}
+      
+
+        {# it's not mandatory to set the timezone in localizeddate(). This is done to
+           avoid errors when the 'intl' PHP extension is not available and the application
+           is forced to use the limited "intl polyfill", which only supports UTC and GMT #}
+        <!-- Page rendered on {{ 'now'|format_datetime('long', 'long', locale='fr') }} -->
+    </body>
+</html>

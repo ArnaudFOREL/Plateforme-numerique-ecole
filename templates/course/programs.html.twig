@@ -1,0 +1,442 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'programs' %}
+
+{% block main %}
+
+<section class="text-center my-5 dark-grey-text">
+
+    <h1 class="font-weight-bold">Programmes de la semaine par niveau</h1>
+
+</section>
+
+{# <h1 class="mb-4"><i class="fa fa-clipboard-check mr-2"></i>Programmes de la semaine par niveau</h1> #}
+
+<div class="row">
+    <div class="col-4 offset-4 text-center">
+        <img src="https://mdbootstrap.com/img/illustrations/app-user-colour.svg" class="img-fluid" alt="sample image">
+    </div>
+</div>
+
+<!--Section: Content-->
+<section class="text-center px-md-5 mx-md-5 dark-grey-text">
+
+    <!--Grid row-->
+    <div class="row d-flex justify-content-center">
+
+      <!--Grid column-->
+      <div class="col-lg-7">
+
+        <p>Vous trouverez ci-dessous les différents programmes de chaque classe. Si un bouton apparait "grisé", c'est qu'aucun programme n'est disponible pour cette classe.</p>
+
+      </div>
+      <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+  </section>
+  <!--Section: Content-->
+
+<hr class="my-5">
+
+<!--Section: Content-->
+<section class="text-center px-md-5 mx-md-5 dark-grey-text">
+
+    <!--Grid row-->
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-lg-6 mb-lg-0 mb-md-4">
+
+            <!--Image-->
+            <div class="view overlay z-depth-1-half">
+                <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(1).jpg" class="img-fluid" alt="">
+                <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-6 mt-5">
+
+            <h3 class="font-weight-bold">CP d'Isabelle</h3>
+
+            <p class="text-muted">Programme des CP de la classe d'Isabelle</p>
+
+            <a href="{{ asset('homepage/Programs/'~ page.cpprogram1 ) }}" class="btn btn-info btn-md waves-effect {% if not page.cpprogram1 %}disabled{% endif %}">Télécharger le programme<i class="fa fa-download ml-1"></i></a>
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+</section>
+<!--Section: Content-->
+
+<hr class="my-5">
+
+<!--Section: Content-->
+<section class="text-center px-md-5 mx-md-5 dark-grey-text">
+ 
+    <!--Grid row-->
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-lg-6 my-5">
+
+            <h3 class="font-weight-bold">CP de Véronique et Pascal</h3>
+
+            <p class="text-muted">Programme des CP de la classe de Véronique et Pascal</p>
+
+            <a href="{{ asset('homepage/Programs/'~ page.cpprogram2 ) }}" class="btn btn-info btn-md waves-effect {% if not page.cpprogram2 %}disabled{% endif %}">Télécharger le programme<i class="fa fa-download ml-1"></i></a>
+
+        </div>
+        <!--Grid column-->
+      
+        <!--Grid column-->
+        <div class="col-lg-6 mb-lg-0 mb-md-4">
+
+            <!--Image-->
+            <div class="view overlay z-depth-1-half">
+                <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(2).jpg" class="img-fluid" alt="">
+                <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+</section>
+<!--Section: Content-->
+
+<hr class="my-5">
+
+<!--Section: Content-->
+<section class="text-center px-md-5 mx-md-5 dark-grey-text">
+ 
+    <!--Grid row-->
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-lg-6 mb-lg-0 mb-md-4">
+
+            <!--Image-->
+            <div class="view overlay z-depth-1-half">
+                <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(3).jpg" class="img-fluid" alt="">
+                <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-6 my-5">
+
+            <h3 class="font-weight-bold">CE1 d'Isabelle</h3>
+
+            <p class="text-muted">Programme des CE1 de la classe d'Isabelle</p>
+
+            <a href="{{ asset('homepage/Programs/'~ page.ce1program1 ) }}" class="btn btn-info btn-md waves-effect {% if not page.ce1program1 %}disabled{% endif %}">Télécharger le programme<i class="fa fa-download ml-1"></i></a>
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+</section>
+<!--Section: Content-->
+
+<hr class="my-5">
+
+<!--Section: Content-->
+<section class="text-center px-md-5 mx-md-5 dark-grey-text">
+ 
+    <!--Grid row-->
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-lg-6 my-5">
+
+            <h3 class="font-weight-bold">CE1 de Véronique et Pascal</h3>
+
+            <p class="text-muted">Programme des CE1 de la classe de Véronique et Pascal</p>
+
+            <a href="{{ asset('homepage/Programs/'~ page.ce1program2 ) }}" class="btn btn-info btn-md waves-effect {% if not page.ce1program2 %}disabled{% endif %}">Télécharger le programme<i class="fa fa-download ml-1"></i></a>
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-6 mb-lg-0 mb-md-4">
+
+            <!--Image-->
+            <div class="view overlay z-depth-1-half">
+                <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(4).jpg" class="img-fluid" alt="">
+                <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+</section>
+<!--Section: Content-->
+
+<hr class="my-5">
+
+<!--Section: Content-->
+<section class="text-center px-md-5 mx-md-5 dark-grey-text">
+ 
+    <!--Grid row-->
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-lg-6 mb-lg-0 mb-md-4">
+
+            <!--Image-->
+            <div class="view overlay z-depth-1-half">
+                <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(5).jpg" class="img-fluid" alt="">
+                <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-6 my-5">
+
+            <h3 class="font-weight-bold">CE1 d'Hélène</h3>
+
+            <p class="text-muted">Programme des CE1 de la classe d'Hélène</p>
+
+            <a href="{{ asset('homepage/Programs/'~ page.ce1program3 ) }}" class="btn btn-info btn-md waves-effect {% if not page.ce1program3 %}disabled{% endif %}">Télécharger le programme<i class="fa fa-download ml-1"></i></a>
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+</section>
+<!--Section: Content-->
+
+<hr class="my-5">
+
+<!--Section: Content-->
+<section class="text-center px-md-5 mx-md-5 dark-grey-text">
+ 
+    <!--Grid row-->
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-lg-6 my-5">
+
+            <h3 class="font-weight-bold">CE2 d'Hélène</h3>
+
+            <p class="text-muted">Programme des CE2 de la classe d'Hélène</p>
+
+            <a href="{{ asset('homepage/Programs/'~ page.ce2program1 ) }}" class="btn btn-info btn-md waves-effect {% if not page.ce2program1 %}disabled{% endif %}">Télécharger le programme<i class="fa fa-download ml-1"></i></a>
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-6 mb-lg-0 mb-md-4">
+
+            <!--Image-->
+            <div class="view overlay z-depth-1-half">
+                <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(6).jpg" class="img-fluid" alt="">
+                <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+</section>
+<!--Section: Content-->
+
+<hr class="my-5">
+
+<!--Section: Content-->
+<section class="text-center px-md-5 mx-md-5 dark-grey-text">
+ 
+    <!--Grid row-->
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-lg-6 mb-lg-0 mb-md-4">
+
+            <!--Image-->
+            <div class="view overlay z-depth-1-half">
+                <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(7).jpg" class="img-fluid" alt="">
+                <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-6 my-5">
+
+            <h3 class="font-weight-bold">CE2 de Syverine</h3>
+
+            <p class="text-muted">Programme des CE2 de la classe de Syverine</p>
+
+            <a href="{{ asset('homepage/Programs/'~ page.ce2program2 ) }}" class="btn btn-info btn-md waves-effect {% if not page.ce2program2 %}disabled{% endif %}">Télécharger le programme<i class="fa fa-download ml-1"></i></a>
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+</section>
+<!--Section: Content-->
+
+<hr class="my-5">
+
+<!--Section: Content-->
+<section class="text-center px-md-5 mx-md-5 dark-grey-text">
+ 
+    <!--Grid row-->
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-lg-6 my-5">
+
+            <h3 class="font-weight-bold">CM1 de Syverine</h3>
+
+            <p class="text-muted">Programme des CM1 de la classe de Syverine</p>
+
+            <a href="{{ asset('homepage/Programs/'~ page.cm1program1 ) }}" class="btn btn-info btn-md waves-effect {% if not page.cm1program1 %}disabled{% endif %}">Télécharger le programme<i class="fa fa-download ml-1"></i></a>
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-6 mb-lg-0 mb-md-4">
+
+            <!--Image-->
+            <div class="view overlay z-depth-1-half">
+                <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(8).jpg" class="img-fluid" alt="">
+                <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+</section>
+<!--Section: Content-->
+
+<hr class="my-5">
+
+<!--Section: Content-->
+<section class="text-center px-md-5 mx-md-5 dark-grey-text">
+ 
+    <!--Grid row-->
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-lg-6 mb-lg-0 mb-md-4">
+
+            <!--Image-->
+            <div class="view overlay z-depth-1-half">
+                <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(11).jpg" class="img-fluid" alt="">
+                <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-6 my-5">
+
+            <h3 class="font-weight-bold">CM1 de Delphine</h3>
+
+            <p class="text-muted">Programme des CM1 de la classe de Delphine</p>
+
+            <a href="{{ asset('homepage/Programs/'~ page.cm1program2 ) }}" class="btn btn-info btn-md waves-effect {% if not page.cm1program2 %}disabled{% endif %}">Télécharger le programme<i class="fa fa-download ml-1"></i></a>
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+</section>
+<!--Section: Content-->
+
+<hr class="my-5">
+
+<!--Section: Content-->
+<section class="text-center px-md-5 mx-md-5 dark-grey-text">
+ 
+    <!--Grid row-->
+    <div class="row">
+
+        <!--Grid column-->
+        <div class="col-lg-6 my-5">
+
+            <h3 class="font-weight-bold">CM2 d'Eric</h3>
+
+            <p class="text-muted">Programme des CM2 d'Eric</p>
+
+            <a href="{{ asset('homepage/Programs/'~ page.cm2program1 ) }}" class="btn btn-info btn-md waves-effect {% if not page.cm2program1 %}disabled{% endif %}">Télécharger le programme<i class="fa fa-download ml-1"></i></a>
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-6 mb-lg-0 mb-md-4">
+
+            <!--Image-->
+            <div class="view overlay z-depth-1-half">
+                <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(13).jpg" class="img-fluid" alt="">
+                <a href="#">
+                    <div class="mask rgba-white-slight"></div>
+                </a>
+            </div>
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!--Grid row-->
+
+</section>
+<!--Section: Content-->
+
+<a href="{{ path('blog_index') }}" class="btn btn-warning"><i class="fa fa-chevron-left mr-2"></i>Retour</a>
+  
+{% endblock %}

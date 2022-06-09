@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<style>
+    .my-custom-scrollbar {
+    position: relative;
+    height: 250px;
+    overflow: auto;
+    }
+    .card-img-35 {
+    width: 35px;
+    }
+    .mt-3p {
+    margin-top: 3px;
+    }
+    
+</style>
+    
+{% endblock %}
+
+{% block main %}
+	<div class="container z-depth-1 p-3 mb-5">
+		<h1>Chat</h1>
+		<hr>
+		<div id="mercure-content-receiver"></div>
+		<form id="mercure-message-form" action="{{ path('sendMessage') }}" method="post" class="mt-5">
+			<div class="md-form">
+				<i class="fas fa-pencil-alt prefix"></i>
+				<textarea id="mercure-message-input" name="message" class="md-textarea form-control" rows="2"></textarea>
+				<label for="mercure-message-input">Message:</label>
+			</div>
+			<div class="col-lg-12 text-center">
+				<button type="submit" class="btn btn-primary" id="mercure-message-btn"><i class="fa fa-paper-plane mr-2"></i> Envoyer !</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+
+
+{% block javascripts %}
+  <script type="text/javascript">
+    const userName = '{{ app.user.fullName }}';
+    const _receiver = document.getElementById('mercure-content-receiver');
+    const _messageInput = document.getElementById('mercure-message-input');
+    const _sendForm = document.getElementById('mercure-message-form');
+
+    const sendMessage = (message, user = 'ChatBot') => {
+      if (message === '') {
+        return;
+      }
+
+      fetch(_sendForm.action, {
+        method: _sendForm.method,
+        body: 'message=' + message + '&user=' + user,
+        headers: new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        })
+      }).then(() => {
+        _messageInput.value = '';
+      });
+    };
+
+    _sendForm.onsubmit = (evt) => {
+      sendMessage(_messageInput.value, userName);
+
+      evt.preventDefault();
+      return false;
+    };
+    
+    const url = new URL('{{ mercure_publish_url }}');
+    url.searchParams.append("topic", "https://127.0.0.1:8000/fr/message");
+    
+    const eventSource = new EventSource(url); // , {withCredentials: true}
+    eventSource.onmessage = evt => {
+      const data = JSON.parse(evt.data);
+      if (!data.message || !data.user) {
+        return;
+	  }
+	  
+	  var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+	  if(data.user == '{{ app.user.fullName}}') {
+		_receiver.insertAdjacentHTML('beforeend', 
+		`<div class="row">
+			<div class="col-md-6"></div>
+			<div class="col-md-6">
+				<div class="media mt-3">
+					<div class="media-body">
+						<p class="mt-0 font-weight-bold small mb-1"><span class="text-muted small">Le ${new Date().toLocaleDateString('fr-FR', options)}</span><span class="float-right mt-3p">${data.user}</span></p>
+						<div class="mb-0 font-weight-light small primary-color text-white p-2 rounded">${data.message}</div>
+					</div>
+				</div>
+			</div>
+		</div>`);
+	  } else if(data.user == 'ChatBot') {
+		_receiver.insertAdjacentHTML('afterbegin', 
+		`<div class="row pl-2">
+			<div class="alert alert-info alert-dismissible fade show" role="alert">
+				<p class="mt-0 font-weight-bold mb-1">${data.user}</p>
+				<div class="mb-0 font-weight-light">${data.message}</div>
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</div>`);
+	  } else {
+		_receiver.insertAdjacentHTML('beforeend', 
+		`<div class="row">
+			<div class="col-md-6">
+				<div class="media mt-3">
+					<div class="media-body">
+						<p class="mt-0 font-weight-bold small mb-1">${data.user} <span class="text-muted small float-right">Le ${new Date().toLocaleDateString('fr-FR', options)}</span></p>
+						<div class="mb-0 font-weight-light small grey lighten-2 p-2 rounded">${data.message}</div>
+					</div>
+				</div>
+			</div>
+		</div>`);
+	  }
+	};
+	
+	window.addEventListener('DOMContentLoaded', () => {
+		sendMessage(userName + ' a rejoint le chat !');
+	});
+	
+  </script>
+  {# ./mercure/mercure --jwt-key "I-c4N_H@Z{M3rCuR3}&SymF0nY~1n~AFSY" --addr "localhost:3000" --cors-allowed-origins "localhost:8000" --publish-allowed-origins "*" --use-forwarded-headers #}
+  {# JWT_KEY='I-c4N_H@Z{M3rCuR3}&SymF0nY~1n~AFSY' ADDR='localhost:3000' ALLOW_ANONYMOUS=1 CORS_ALLOWED_ORIGINS=* ./mercure/mercure #}
+{% endblock %}
+

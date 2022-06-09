@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<link href="{{asset('dist/dropzone.css')}}" rel="stylesheet" />
+{% endblock %}
+
+{% block main %}
+	<h1>Editer l'objet de cours</h1>
+
+	{{ form_start(form)}}
+		
+	{{ form_row(form.name, {'label': "Nom de l'objet"})}}
+
+	{{ form_row(form.content, {'label': "Contenu de l'objet", 'attr': {'rows': 10, 'type': 'fos_ckeditor'}})}}
+	
+	<div id="alert"></div>
+
+	<section>
+		<div class="jumbotron-fluid">
+			<!-- row -->
+			<div class="row">
+				<div class="col-lg-8">
+			    	<h4><i class="fa fa-angle-right"></i> Ajouter ou modifier les documents de cet objet</h4>
+					<section class="wrapper">
+				        <div class="form-group">
+					         <label class=" control-label required">Effacez ou ajouter les documents ci dessous :</label>
+					         <div class="col-lg-12">
+					             	<div class="dropzone">
+										
+									 </div>
+					         </div>
+					    </div>			          
+				    </section>
+				</div>
+				
+		    </div>
+	    </div>
+	</section>
+
+	{{ form_row(form.url, {'label': "Adresse URL de vidéo(s) à intégrer (Youtube, Canopé, etc...) - Séparées par des virgules "})}}
+	
+	<a href="{{ path('course_edit', {'id': object.course.id}) }}" class="btn btn-secondary"><i class="fa fa-chevron-left mr-2"></i>Retour</a>
+	<button type="submit" class="btn btn-success">Enregistrer</button>
+
+	{{ form_row(form.upload, {'label': 'Ajouter des documents', 'attr': {'style': 'display:none'}}) }}
+
+
+	{{ form_end(form)}}
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('dist/dropzone.js')}}"></script>
+	{% include 'course/config_dropzone.html.twig' %}
+{% endblock %}

@@ -1,0 +1,248 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<link href="{{ asset('css/addons-pro/stepper.css') }}" rel="stylesheet">
+	<link href="https://vjs.zencdn.net/7.8.2/video-js.css" rel="stylesheet" />
+{% endblock %}
+
+{% block main %}
+
+<div class="row my-4">
+	<div class="col-md-4">
+		{% if 'img/' in course.image or 'http' in course.image %}
+			<img src="{{ asset(course.image) }}" alt="Illustration du cours {{ course.title }}" width="100%" class="img-thumbnail">
+		{% else %}
+			<img src="{{ asset('tasks/'~ course.id ~'/'~ course.image) }}" alt="Illustration du cours {{ course.title }}" width="100%" class="img-thumbnail">
+		{% endif %}
+	</div>
+	<div class="col-md-8">
+		<div class="row">
+			<div class="col-6 text-left"><h2>{{ course.title}}</h2></div>
+			<div class="col-6"><a href="{{ path('course_list') }}" class="btn btn-outline-info"><i class="fa fa-home"></i> Retour à la liste des cours</a></div>
+		</div>
+		<div class="row my-2">
+			<div class="col-md-6">
+				<div class="treeview-colorful border border-info mx-4 my-4">
+					<h6 class="pt-3 pl-3">Sommaire</h6>
+					<hr>
+					<ul class="treeview-colorful-list mb-3">
+						<li class="treeview-colorful-items">
+							<a class="treeview-colorful-items-header">
+								<i class="fa fa-caret-down"></i>
+								<i class="fa fa-chalkboard-teacher mx-1"></i>Documents
+							</a>
+							<ul class="nested">
+								{% for object in objects|sort((a, b) => a.ranking > b.ranking) %}
+								<li>
+									{% if userCourse.step == step and loop.index <= step %}
+										<div class="treeview-colorful-element text-success">{{ include('course/_icons_summary.html.twig', {'name': object.name}) }} {{ object.name}} <i class="fa fa-check ml-2"></i> </div>
+									{% else %}
+										<div class="treeview-colorful-element">{{ include('course/_icons_summary.html.twig', {'name': object.name}) }} {{ object.name}}</div>
+									{% endif %}
+								</li>
+								{% endfor %}
+								{% if course.IsUploadEnd == true %}
+								<li>
+									{% if userCourse.progress == 100 %}
+										<div class="treeview-colorful-element text-success"><i class="fa fa-file-upload"></i> Envoi des travaux<i class="fa fa-check ml-2"></i></div>
+									{% else %}
+										<div class="treeview-colorful-element"><i class="fa fa-file-upload"></i> Envoi des travaux</div>
+									{% endif %}
+								</li>
+								{% endif %}
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h5>Progression :</h5>
+				{% if userCourse.progress != 0 %}
+					{{ userCourse.progress }} %
+					<div class="progress md-progress" style="height: 10px">
+						<div class="progress-bar bg-success" role="progressbar" style="width:"~{{ userCourse.progress }}~"; height: 10px" aria-valuenow="{{ userCourse.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+					</div>
+				{% else %}
+					Non commencé
+					<div class="progress md-progress bg-warning" style="height: 10px">
+					    <div class="indeterminate"></div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+  	<div class="card text-center mb-5">
+		<div class="card-header">
+			<ul class="nav nav-tabs card-header-tabs">
+			{% for object in objects|sort((a, b) => a.ranking > b.ranking) %}
+				<li class="nav-item">
+					<a class="nav-link {% if loop.index == step %}active{% endif %}" data-toggle="tab" href="#panel{{object.ranking}}" id="{{object.ranking}}-tab" role="tab" aria-controls="{{object.name}}"
+	      aria-selected="true">{{object.name}}</a>
+					</li>
+			{% endfor %}
+			{% if course.IsUploadEnd == true %}
+				<li class="nav-item">
+					<a class="nav-link {% if step == 99 %}active{% endif %}" data-toggle="tab" href="#panel99" id="99-tab" role="tab" aria-controls="upload-tab" aria-selected="true">Envoi des travaux</a>
+				</li>
+			{% endif %}
+			</ul>
+		</div>
+
+		<div class="card-body tab-content">
+
+		{% for object in objects|sort((a, b) => a.ranking > b.ranking) %}
+			<div class="tab-pane fade {% if loop.index == step %}show active{% endif %}" id="panel{{object.ranking}}" role="tabpanel" aria-labelledby="{{object.ranking}}-tab">
+				<h5 class="card-title">{{object.name}}</h5>
+				<div class="card-text text-left">{{object.content|raw}}</div>
+				{% for document in object.documents %}
+					{% if 'pdf' in document.filetype or 'image' in document.filetype %}
+						<iframe src="{{ asset('tasks/'~object.course.id~'/'~object.id~'/'~document.filename) }}" type="{{ document.filetype }}" width="80%" height="500" allow="fullscreen"></iframe><br/>
+						<a href="{{ asset('tasks/'~object.course.id~'/'~object.id~'/'~document.filename) }}" class="btn btn-outline-primary" target="_blank"><i class="fa fa-expand-arrows-alt mr-2"></i>Plein écran</a><br/>
+					{% elseif 'stream' in document.filetype or 'audio' in document.filetype %}
+						<audio controls>
+							<source src="{{ asset('tasks/'~object.course.id~'/'~object.id~'/'~document.filename) }}">
+						</audio><br/>
+					{% elseif 'video' in document.filetype %}
+						<div class="embed-responsive embed-responsive-16by9 mb-4">
+							<div class="embed-responsive-item">
+								<video width="720" height="405" controls class="video-js" data-setup='{}'>
+									<source src="{{ asset('tasks/'~object.course.id~'/'~object.id~'/'~document.filename) }}" type="{{ document.filetype }}">
+									Your browser does not support the video tag or the file format of this video.
+								</video>
+							</div>
+						</div><br/>
+					{% else %}
+						<iframe src="{{ asset('tasks/'~object.course.id~'/'~object.id~'/'~document.filename) }}" type="{{ document.filetype }}" width="80%" allow="fullscreen"></iframe><br/>
+						<a href="{{ asset('tasks/'~object.course.id~'/'~object.id~'/'~document.filename) }}" class="btn btn-outline-primary" target="_blank"><i class="fa fa-expand-arrows-alt mr-2"></i>Plein écran</a><br/>
+					{% endif %}
+					<div class="row">
+						<div class="col-lg-6 offset-lg-3">
+							{% if code and object.url %}
+								{% for url in code %}
+									{% for objurl in object.url|split(',') %}
+										{% if objurl|trim in url %}
+											{{ url|raw }}
+										{% endif %}
+									{% endfor %}
+								{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+				{% else %}
+					<div class="row">
+						<div class="col-lg-6 offset-lg-3">
+							{% if code and object.url %}
+								{% for url in code %}
+									{% for objurl in object.url|split(',') %}
+										{% if objurl|trim in url %}
+											{{ url|raw }}
+										{% endif %}
+									{% endfor %}
+								{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+				{% endfor %}
+				
+				
+				<div class="row">
+					<div class="col-6 text-left">
+						{% if not loop.first %}
+							<a class="btn btn-outline-secondary btn-panel" id="{{object.ranking - 2}}">Précédent</a>
+						{% endif %}
+					</div>
+					<div class="col-6 text-right">
+						{% if loop.index < step %}
+							<a class="btn btn-outline-secondary btn-panel" id="{% if loop.last %}98{% else %}{{object.ranking}}{% endif %}" >Suivant</a>
+						{% else %}
+							{% if not loop.last or course.IsUploadEnd %}
+								<a class="btn btn-outline-secondary btn-panel" href="{{ path('updateprogress', {course: course.id, step: step}) }}">Suivant</a>
+							{% endif %}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		{% else %}
+			Pas d'objets dans ce cours.
+		{% endfor %}
+			{% if course.IsUploadEnd == true %}
+				<div class="tab-pane fade {% if step == 99 %}show active{% endif %}" id="panel99" role="tabpanel" aria-labelledby="upload-tab">
+					<div>
+						<h5 class="card-title my-5">N'oublie pas de nous envoyer ton travail !</h5>
+					
+						<p class="card-text mb-5">
+							Tu peux le faire tout de suite en cliquant sur ce bouton :
+							<a href="{{ path('course_works') }}" class="btn btn-success mb-5"><i class="fa fa-paper-plane mr-2"></i>Envoyer mes travaux !</a><br/>
+							Sinon, tu peux nous envoyer tous tes travaux plus tard (ou par email).
+							<a href="{{ path('course_list') }}" class="btn-link">Envoyer mes documents plus tard.</a>
+						</p>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+	<script src="https://vjs.zencdn.net/7.8.2/video.js"></script>
+	<script>
+	$(document).ready(function () {
+		$('.btn-panel').on('click', function () {
+			var id = $(this).attr('id');
+			id = parseInt(id) + parseInt(1);
+			$('a[href="#panel'+ id +'"]').tab('show');
+		});
+		$('.stepper').mdbStepper();
+		(function ($) {
+
+	      //let $allPanels = $('.nested').hide();
+	      let $elements = $('.treeview-colorful-element');
+
+	      $('.treeview-colorful-items-header').click(function () {
+	        $this = $(this);
+	        $target = $this.siblings('.nested');
+	        $pointerPlus = $this.children('.fa-caret-down');
+	        $pointerMinus = $this.children('.fa-rotate-180');
+
+	        $pointerPlus.addClass('fa-rotate-180');
+	        $pointerMinus.removeClass('fa-rotate-180');
+	        $this.toggleClass('open')
+	        if (!$target.hasClass('active')) {
+	          $target.addClass('active').slideDown();
+	        } else {
+	          $target.removeClass('active').slideUp();
+	        }
+
+	        return false;
+	      });
+	      $elements.click(function () {
+	        $this = $(this);
+
+	        if ($this.hasClass('opened')) {
+
+	          $elements.removeClass('opened');
+	        } else {
+
+	          $elements.removeClass('opened');
+	          $this.addClass('opened');
+	        }
+	      })
+	    })(jQuery);
+	});
+
+	function next21() {
+		setTimeout(function () {
+			$('#horizontal-stepper').nextStep();
+		}, 2000);
+	}
+</script>
+{% endblock %}
+
+

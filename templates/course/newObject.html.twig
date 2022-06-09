@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+	<h1>Nouvel objet du cours <strong>"{{ course.title }}"</strong></h1>
+
+	{{ form_start(form)}}
+		
+	{{ form_row(form.name)}}
+	
+	{{ form_row(form.content, {'label': "Contenu de l'objet", 'attr': {'rows': 10}})}}
+
+	{{ form_row(form.url, {'label': "Adresse URL de vidéo(s) à intégrer (Youtube, Canopé, etc...) - Séparées par des virgules "})}}
+
+	<div class="row">
+		<div class="col-4 text-center">
+			<a href="{{ path('course_edit', {'id': course.id}) }}" class="btn btn-secondary"><i class="fa fa-chevron-left mr-2"></i>Retour</a>
+		</div>
+		<div class="col-4 text-center">
+			{{ form_row(form.upload, {'label': 'Enregistrer et ajouter des documents'}) }}
+		</div>
+		<div class="col-4 text-center">
+			<button type="submit" class="btn btn-success">Enregistrer</button>
+		</div>		
+	</div>
+	
+	{{ form_end(form)}}
+{% endblock %}
+

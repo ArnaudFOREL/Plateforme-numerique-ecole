@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link href="{{asset('dist/dropzone.css')}}" rel="stylesheet" />
+{% endblock %}
+
+{% block body_id 'user_avatar' %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="section">
+                <a href="{{ path('user_change_password') }}" class="btn btn-warning">
+                    <i class="fa fa-lock" aria-hidden="true"></i> {{ 'action.change_password'|trans }}
+                </a>
+                <a href="{{ path('user_profile') }}" class="btn btn-info">
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i> Retour
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+
+            <h1>Modifier l'avatar</h1>
+            
+            <div id="alert"></div>
+            <section>
+                <div class="jumbotron-fluid">
+                    <!-- row -->
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h4><i class="fa fa-angle-right"></i> Ajouter ou modifier votre avatar</h4>
+                            <section class="wrapper">
+                                <div class="form-group">
+                                     <div class="col-lg-12">
+                                            <div class="dropzone"></div>
+                                     </div>
+                                </div>                    
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('dist/dropzone.js')}}"></script>
+<script>
+// init,configure dropzone
+Dropzone.autoDiscover = false;
+var dropzone_default = new Dropzone(".dropzone", {
+    url: '{{ path('uploadavatar', {user: app.user.id}) }}',
+    uploadMultiple: false,
+    dictDefaultMessage: 'Déposez vos documents ici ou cliquez dans cette zone',
+    acceptedFiles: 'image/*',
+    dictInvalidFileType: 'Mauvais type de fichier ! Seulement des images sont acceptées',
+    maxFilesize: 10,  // in Mb
+    dictFileTooBig: 'Fichier trop volumineux ! Taille max : 10Mo',
+    init: function () {
+        $.get('{{ path('getavatar', {user: app.user.id}) }}', function(data) {
+            $.each(data, function(key,value){
+                var mockFile = { name: value.name, size: value.size };
+                dropzone_default.emit("addedfile", mockFile);
+                dropzone_default.emit("thumbnail", mockFile, "{{ asset('users/'~ app.user.id )}}/"+value.name);
+                dropzone_default.emit("complete", mockFile);
+            });
+        });
+        
+        this.on("success", function(response) {
+            if (response.uploaded) 
+                alert('Le fichier a bien été uploadé : ' + response.fileName);
+        });
+
+        this.on("addedfile", function(file) {
+
+            // Create the remove button
+            var removeButton = Dropzone.createElement("<button class='btn btn-danger btn-rounded btn-sm'><i class='fas fa-trash mr-2'></i>Retirer le fichier</button>");
+            
+            // Capture the Dropzone instance as closure.
+            var _this = this;
+
+            // Listen to the click event
+            removeButton.addEventListener("click", function(e) {
+                // Make sure the button click doesn't submit the form:
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (confirm('Supprimer le fichier : '+file.name+' ?')) {
+
+                    // Remove the file preview.
+                    _this.removeFile(file);
+                 
+                    $.ajax({
+                        url: "{{ path('deleteavatar', {user: app.user.id}) }}",
+                        type: "GET",
+                        data: {'name': file.name}
+                    })
+                    .done(function() {
+                        $('#alert').append('<div class="alert alert-success fade show">Fichier supprimé !</div>');
+                        setTimeout(function() {$(".alert").alert('close')}, 2000);
+                    });
+                };
+                
+            });
+
+            // Add the button to the file preview element.
+            file.previewElement.appendChild(removeButton);
+        });
+    }
+});
+</script>
+{% endblock %}
+

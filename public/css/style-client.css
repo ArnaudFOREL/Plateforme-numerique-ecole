@@ -1,0 +1,168 @@
+/* GENERAL */
+
+body {
+	/*background : url(/pubconso/public/Images/bg_fish.png) no-repeat top ;*/
+	background-color: #e5c291 !important;
+}
+
+.logo {
+	margin-left : 15%;
+	width: 50%;
+}
+
+#text-top {
+	font-family: 'Century Gothic', sans-serif;
+	font-weight: bold;
+	color: #ad1120;
+	font-size: 36px;
+	text-align: center;
+	margin-bottom: -120px;
+}
+
+.navbar {
+	margin-top : 2%;
+}
+
+#mynavbar ul li:first-child {
+	margin-left : 160%;
+}
+
+
+#mynavbar ul li .nav-link {
+	text-transform: uppercase;
+	font-size : 24px;
+	color: #4d4740;
+}
+
+.form-inline .custom-select {
+	width: 250px !important;
+	border-radius: 25em !important;
+	/*margin-top: 12%;*/
+	margin-left: -15%;
+	box-shadow: 2px 2px 2px #333;
+}
+
+#index-search {
+	height: 53vh;
+	margin-top: 4%;
+}
+
+#text-search {
+	font-family: 'Century Gothic', sans-serif;
+	font-weight: bold;
+	color: #ad1120;
+	font-size: 36px;
+	text-align: center;
+	text-transform: uppercase;
+	margin-bottom: 50px;
+}
+
+#keywords {
+	width: 320px !important;
+	height: calc(2.5em + .75rem + 2px) !important;
+	text-align: center;
+	border-radius: 25em !important;
+	box-shadow: 2px 2px 2px #333;
+	margin-left: 2.5rem !important;
+}
+
+
+#btn-search {
+	border-radius: 25em;
+}
+
+footer .jumbotron {
+	background-color: rgba(126,106,55, 0.4);
+	padding: 0.8em;
+	margin-bottom: 0 !important;
+	box-shadow: 5px 0px 5px burlywood;
+}
+
+footer .list-inline {
+	list-style: none;
+	margin-bottom: 0;
+}
+
+footer a {
+	color: #fff;
+	text-decoration: none;
+	font-size: 20px;
+}
+
+footer a:hover {
+	color : #ad1120;
+	text-decoration: none;
+}
+
+#btn-contact {
+	border-radius: 25em;
+	border: 1px solid #000;
+	font-size: 20px;
+	background-color: #090069;
+	color: white;
+	border: 1px solid #FFF;
+}
+
+.card img {
+	width: 50%;
+}
+
+footer .col-md-2 {
+	padding-left: inherit;
+}
+
+@media(max-width: 800px) {
+	body {
+	
+		background-position: center;
+		background-size: 170%;
+	}
+
+	.logo {
+		width: 25%;
+		margin-left: inherit;
+	}
+
+	#text-top {
+		margin-bottom: inherit;
+		font-size: 20px;
+	}
+
+	#text-search {
+		font-size: 30px;
+	}
+
+	.form-inline .custom-select {
+	margin-left: 12.5%;
+	text-align: center;
+	}
+
+	#mynavbar ul li:first-child {
+	margin: inherit;
+	}
+
+	#mynavbar ul li {
+	margin: inherit;
+	}
+
+	#btn-search {
+	margin: 0 37.5%;
+	width: 25%;
+	}
+
+	#keywords {
+	width: 160px !important;
+	background-color: transparent;
+	box-shadow: 6px 6px 38px goldenrod;
+	border: 2px solid gold;
+	}
+
+	.card img {
+	width: 100%;
+	}
+
+	.btn {
+		margin-top: 1rem;
+	}
+
+}

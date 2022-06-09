@@ -1,0 +1,562 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'admin_post_index' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('css/addons/datatables.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/addons/datatables-select.min.css') }}" rel="stylesheet">
+    <style>
+      .card-list .badge {
+        height: 18px;
+        margin-top: 3px;
+      }
+    </style>
+{% endblock %}
+
+{% block main %}
+<h1 class="mb-4"><i class="fa fa-cogs mr-2"></i>Espace d'administration</h1>
+
+{% if not form.vars.valid %}
+<ul>
+    {# Loop through every form item #}
+    {% for child in form.children %}
+        {# Display the errors of the form item #}
+        {% for error in child.vars.errors %}
+            <div class="alert alert-danger fade show" role="alert">Un utilisateur existe déjà avec ces informations ({{error.message}})</div>
+        {% endfor %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+<!-- Nav tabs -->
+<ul class="nav nav-tabs md-tabs nav-justified primary-color" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#panel111" role="tab">
+        <i class="fas fa-home pr-2"></i>Page d'accueil</a>
+    </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#panel222" role="tab">
+      <i class="fas fa-users-cog pr-2"></i>Utilisateurs</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#panel333" role="tab">
+      <i class="fas fa-chalkboard-teacher pr-2"></i>Cours</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#panel444" role="tab">
+      <i class="fas fa-chalkboard-teacher pr-2"></i>Travaux d'élèves</a>
+  </li>
+</ul>
+<!-- Nav tabs -->
+
+<!-- Tab panels -->
+<div class="tab-content">
+
+    <!-- Panel 1 -->
+    <div class="tab-pane fade in show active" id="panel111" role="tabpanel">
+
+        <section>   
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-list">
+                        <div class="card-header d-flex justify-content-between align-items-center py-3">
+                            <p class="h5-responsive font-weight-bold mb-0"><i class="fas fa-clipboard-list pr-2"></i>{{ 'title.post_list'|trans }}</p>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                            {% for post in posts %}
+                                <li class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                    <div class="d-inline-flex">
+                                        <p class="mb-0"><span class="text">{{ post.title }}</span></p>
+                                        <span class="badge badge-info ml-3"><i class="far fa-clock pr-1"></i>{{ post.publishedAt|format_datetime('medium', 'short', locale='fr') }}</span>
+                                    </div>
+                                    <div class="tools form-inline">
+                                        <a href="{{ path('admin_post_show', {id: post.id}) }}" class="btn btn-outline-default btn-sm" title="Voir"><i class="far fa-eye"></i></a>
+                                        <a href="{{ path('admin_post_edit', {id: post.id}) }}" class="btn btn-outline-secondary btn-sm" title="Editer"><i class="far fa-edit"></i></a>
+                                        <form method="post" action="{{ path('admin_post_delete', {id: post.id}) }}" style="display:inline-block" onsubmit="return confirm('Supprimer cette annonce ?')" title="Supprimer">
+                                            <input type="hidden" name="_method" value="post">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
+                                            <button class="btn btn-outline-danger btn-sm"><span class="far fa-trash-alt"></span></button>
+                                        </form>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="card-footer py-3">
+                            <div class="text-right">
+                                <a href="{{ path('admin_post_new') }}" class="btn btn-primary btn-md px-3 my-0 mr-0">
+                                    {{ 'action.create_post'|trans }}<i class="fas fa-plus pl-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-list mt-5">
+                        <div class="card-header d-flex justify-content-between align-items-center py-3">
+                            <p class="h5-responsive font-weight-bold mb-0"><i class="fas fa-edit pr-2"></i>Modifier le contenu</p>
+                        </div>
+                        <div class="card-body">
+                            {{ form_start(formPage, {'validate': 'novalidate'}) }}
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ form_label(formPage.content, 'Message d\'accueil' ) }}
+                                    {{ form_widget(formPage.content) }}
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-primary">Enregistrer le message d'accueil</button>
+                                </div>
+                            </div>
+                             <div class="row mt-4">
+                                <h4>Image principale</h4><br/>
+                                <small>Il n'est pas obligatoire de choisir une image. Par défaut, cette image sera affichée :</small>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-12">
+                                    <div class="md-form">
+                                        <div class="file-field">
+                                            <div class="z-depth-1-half mb-4">
+                                                <img src="https://cdn.pixabay.com/photo/2020/02/14/10/40/bird-4848178_960_720.jpg" class="img-fluid" alt="example placeholder">
+                                            </div>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                {{ form_label(formPage.pageImage, 'Image principale') }}
+                                                <div class="btn btn-md btn-mdb-color">
+                                                    <span class="fa fa-upload"></span> Choisir une image
+                                                    {{ form_widget(formPage.pageImage) }}
+                                                </div>
+                                                <a href="{{ path('home_deleteImg', {'img': "principale", "id": page.id}) }}" class="btn btn-danger btn-md"><i class="fa fa-trash-alt"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form_end(formPage) }}
+                            <hr>
+                            <div class="row p-2 mx-2">
+                                <h4>Programmes</h4>
+                                <div class="col-12 text-center">
+                                    <a href="{{path('admin_programs')}}" class="btn btn-dark"><i class="fa fa-edit mr-2"></i>Modifier les programmes</a>
+                                </div>
+                            </div>
+                                
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-list mt-5 text-center">
+
+                        <div class="card-header d-flex justify-content-between align-items-center py-3">
+                            <p class="h5-responsive font-weight-bold mb-0"><i class="fas fa-eye pr-2"></i>Aperçu de la page actuelle</p>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="alert alert-info">
+                                <p>Cet aperçu permet de valider l'affichage des images téléchargées lors de la modification.</p>
+                            </div>
+
+                            <!-- Title -->
+                            <h4 class="card-title h2 pb-2">{{ page.content|raw }}</h4>
+
+                            <!-- Card image -->
+                            {% if page.pageImage %}
+                                <img src="{{ asset('homepage/'~ page.pageImage ) }}" class="img-fluid" alt="">
+                            {% else %}
+                                <img src="https://cdn.pixabay.com/photo/2020/02/14/10/40/bird-4848178_960_720.jpg" class="img-fluid" alt="example placeholder">
+                            {% endif %}
+                        
+                            <hr class="my-5">
+
+                            <!--Section: Content-->
+                            <section class="dark-grey-text">
+
+                                <h3 class="font-weight-bold pt-4 mb-4">Les programmes de la semaine</h3>
+
+                                <h5 class="font-weight-bold mb-5">Retrouvez les programmes des différents niveaux en cliquant sur le bouton ci dessous.</h5>
+
+                                <a href="{{ path('view_programs')}}" class="btn btn-outline-dark">Accéder aux différents programmes</a>
+
+                            </section>
+                            <!--Section: Content-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+    <!-- Panel 1 -->
+
+  <!-- Panel 2 -->
+  <div class="tab-pane fade" id="panel222" role="tabpanel">
+
+    <!-- Nav tabs -->
+    <div class="row">
+      <div class="col-lg-2">
+        <ul class="nav md-pills pills-primary flex-column" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#panel21" role="tab">Gérer les utilisateurs
+              <i class="fas fa-user-edit ml-2"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#panel22" role="tab">Gérer les groupes
+              <i class="fas fa-users ml-2"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-lg-10">
+        <!-- Tab panels -->
+        <div class="tab-content vertical">
+          <!-- Panel 1 -->
+          <div class="tab-pane fade in show active" id="panel21" role="tabpanel">
+            <h5 class="my-2 h5">Utilisateurs</h5>
+            <a href="#" data-toggle="modal" data-target="#modalRegisterForm" class="btn btn-primary"><i class="fa fa-plus"></i> Ajouter un utilisateur</a>
+                <table id="dtMaterialDesignExample" class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="th-sm">Identifiant
+                            </th>
+                            <th class="th-sm">Prénom
+                            </th>
+                            <th class="th-sm">Nom
+                            </th>
+                            <th class="th-sm">Email
+                            </th>
+                            <th class="th-sm">Niveau
+                            </th>
+                            <th class="th-sm">Dernière connexion
+                            </th>
+                            <th class="th-sm">Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.firstname }}</td>
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                {% for role in user.roles %}
+                                    {% if 'ADMIN' in role %}
+                                        Administrateur
+                                    {% elseif 'TEACHER' in role %}
+                                        Professeur
+                                    {% else %}
+                                        Elève | {{ user.classroom.name }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>{{ user.connectedAt|date('d/m/Y - H:i') }}</td>
+                            <td class="text-right">
+                                <div class="item-actions">
+                                    {% for role in user.roles %}
+                                        {% if 'ADMIN' not in role %}
+                                            <a href="{{ path('admin_userEdit', {user: user.id}) }}" class="btn btn-outline-secondary btn-sm" title="Editer">
+                                                <i class="far fa-edit" aria-hidden="true"></i>
+                                            </a>
+                                            <form method="post" action="{{ path('admin_userDelete', {user: user.id}) }}" style="display:inline-block" onsubmit="return confirm('Supprimer cet utilisateur ?')" title="Supprimer">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
+                                                <button class="btn btn-outline-danger btn-sm"><span class="far fa-trash-alt"></span></button>
+                                            </form>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Identifiant
+                            </th>
+                            <th>Nom Complet
+                            </th>
+                            <th>Email
+                            </th>
+                            <th>Niveau
+                            </th>
+                            <th>Dernière connexion
+                            </th>
+                            <th>Actions
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+          </div>
+          <!-- Panel 1 -->
+          <!-- Panel 2 -->
+          <div class="tab-pane fade" id="panel22" role="tabpanel">
+            <h5 class="my-2 h5">Groupes</h5>
+            <table class="table table-striped" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th class="th-sm">Nom
+                        </th>
+                        <th class="th-sm">Description
+                        </th>
+                        <th class="th-sm">Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for class in classrooms %}
+                    <tr>
+                        <td>{{ class.name }}</td>
+                        <td>{{ class.description }}</td>
+                        {% if class.id == 99 %}
+                            <td></td>
+                        {% elseif class.id == 100 %}
+                            <td></td>
+                        {% elseif class.id == 110 %}
+                            <td></td>
+                        {% elseif class.id == 120 %}
+                            <td></td>
+                        {% elseif class.id == 130 %}
+                            <td></td>
+                        {% elseif class.id == 140 %}
+                            <td></td>
+                        {% else %}
+                            <td><a href="{{ path('course_classroomEdit', {id: class.id}) }}" class="btn btn-outline-info"><i class="fa fa-user-plus mr-2"></i>Gérer les utilisateurs</a></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+          </div>
+          <!-- Panel 2 -->
+        </div>
+      </div>
+    </div>
+    <!-- Nav tabs -->
+
+  </div>
+  <!-- Panel 2 -->
+
+  <!-- Panel 3 -->
+  <div class="tab-pane fade" id="panel333" role="tabpanel">
+
+    <h2>Catégories</h2>
+        <!--Accordion wrapper-->
+        <div class="accordion md-accordion" id="accordionCategories" role="tablist" aria-multiselectable="true">
+            {% for category in categories %}
+            <!-- Accordion card -->
+            <div class="card border-top border-bottom-0 border-left border-right border-light">
+
+                <!-- Card header -->
+                <div class="card-header border-bottom border-light" role="tab" id="heading{{ category.id }}">
+                    <a data-toggle="collapse" data-parent="#accordionCategories" href="#collapse{{ category.id }}" aria-expanded="true" aria-controls="collapse{{ category.id }}" class="collapsed"> 
+                        <h5 class="black-text font-weight-normal mb-0">
+                            <img src="{{ asset(category.image) }}" width="60"> {{ category.title }} <i class="fas fa-angle-down rotate-icon"></i>
+                        </h5>
+                    </a>
+                </div>
+
+                <!-- Card body -->
+                <div id="collapse{{ category.id }}" class="collapse" role="tabpanel" aria-labelledby="heading{{ category.id }}" data-parent="#accordionCategories">
+                    <div class="card-body">
+                            {{ include('admin/blog/listCourses.html.twig', {
+                                courses: courses[category.id],
+                            }) }}
+                        <hr>
+                        <div class="item-actions text-right">
+                            <a href="{{ path('course_newCat', {category: category.id}) }}" class="btn btn-outline-primary btn-md" title="Ajouter un cours dans cette catégorie">Nouveau cours dans cette catégorie <i class="fas fa-plus"></i></a>
+                            
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('course_categoryEdit', {id: category.id}) }}" class="btn btn-outline-secondary btn-sm" title="Editer cette catégorie"><i class="far fa-edit"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Accordion card -->
+            {% endfor %}
+        </div>
+        <!-- Accordion wrapper -->
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="text-right">
+                <a href="{{ path('course_category') }}" class="btn btn-outline-success btn-lg" title="Ajouter une catégorie"><i class="fa fa-plus mr-2"></i>Ajouter une catégorie</a>
+            </div>
+        {% endif %}
+  </div>
+  <!-- Panel 3 -->
+
+    <!-- Panel 4 -->
+    <div class="tab-pane fade" id="panel444" role="tabpanel">
+    <h5 class="my-2 h5">Travaux d'élèves</h5>
+        <table id="dtWork" class="table" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="th-sm">Nom 
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for work in works %}
+                <tr {% if work.isRead == 1 %}class="grey {% if app.request.cookies.get('darkMode') == 0 %} lighten-3 {% endif %}"{% endif %}>
+                    <td style="width: 10%;">
+                        {% if work.isRead == 0 %}
+                            <i class="fa fa-folder mr-3"></i>
+                        {% else %}
+                            <i class="fa fa-folder-open mr-3"></i>
+                        {% endif %}
+                    </td>
+                    <td><a href="{{ path('admin_showWork', {work: work.id}) }}" class="mb-0"><span class="text {% if work.isRead == 0 %}font-weight-bold{% endif %}">{% if work.user.classroom %}{{ work.user.classroom.name }} |{% endif %} {{ work.user.firstname }} {{ work.user.name }} - {{ work.subject }}</span></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+  <!-- Panel 4 -->
+
+
+</div>
+<!-- Tab panels -->
+
+ <div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Nouvel utilisateur</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {{ form_start(form) }}
+            <div class="modal-body mx-3">
+                <div class="md-form mb-4">
+                    <i class="fas fa-user prefix grey-text"></i>
+                    {{ form_widget(form.username) }}
+                    {{ form_label(form.username) }}
+                </div>
+                
+                <div class="md-form mb-4">
+                    <i class="fas fa-lock prefix grey-text"></i>
+                    {{ form_widget(form.plainPassword) }}
+                    {{ form_label(form.plainPassword) }}
+                </div>
+
+                <div class="md-form mb-5">
+                    <i class="fas fa-portrait prefix grey-text"></i>
+                    {{ form_widget(form.firstname) }}
+                    {{ form_label(form.firstname) }}
+                </div>
+
+                <div class="md-form mb-5">
+                    <i class="fas fa-portrait prefix grey-text"></i>
+                    {{ form_widget(form.name) }}
+                    {{ form_label(form.name) }}
+                </div>
+
+                <div class="md-form mb-5 form_email">
+                    <i class="fas fa-envelope prefix grey-text"></i>
+                    {{ form_widget(form.email, {'attr': {'placeholder': 'Champ non disponible'}}) }}
+                    {{ form_label(form.email) }}
+                </div>
+
+                <div class="md-form mb-5">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <i class="fas fa-star prefix grey-text"></i>
+                            {{ form_label(form.roles, null, {'label_attr': {'class': 'mdb-main-label', 'style': 'margin-left:60px'}}) }}
+                        </div>
+                        <div class="col-sm-8">
+                            {{ form_widget(form.roles, {'attr': {'class': 'mdb-select md-form mt-1 colorful-select dropdown-primary'}}) }}
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="md-form mb-4">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <i class="fas fa-users prefix grey-text"></i>
+                            {{ form_label(form.classroom, null, {'label_attr': {'class': 'mdb-main-label', 'style': 'margin-left:60px'}}) }}
+                        </div>
+                        <div class="col-sm-8">
+                            {{ form_widget(form.classroom, {'attr': {'class': 'mdb-select md-form mt-1 colorful-select dropdown-primary'}}) }}
+                            <small class="form-text text-muted">
+                                Inutile de choisir un groupe pour un professeur, laisser par défaut.
+                            </small>
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button class="btn btn-outline-info" data-dismiss="modal">Annuler</button>
+                <button class="btn btn-deep-orange">Enregistrer</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/addons/datatables.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/addons/datatables-select.min.js') }}" type="text/javascript"></script>
+<script>
+$(document).ready(function () {
+    $('#dtMaterialDesignExample').DataTable();
+    $('#dtMaterialDesignExample_wrapper').find('label').each(function () {
+        $(this).parent().append($(this).children());
+    });
+    $('#dtMaterialDesignExample_wrapper .dataTables_filter').find('input').each(function () {
+        const $this = $(this);
+        $this.attr("placeholder", "Rechercher...");
+        $this.removeClass('form-control-sm');
+    });
+    $('#dtMaterialDesignExample_wrapper .dataTables_length').addClass('d-flex flex-row');
+    $('#dtMaterialDesignExample_wrapper .dataTables_filter').addClass('md-form');
+    $('#dtMaterialDesignExample_wrapper select').removeClass('custom-select custom-select-sm form-control form-control-sm');
+    $('#dtMaterialDesignExample_wrapper select').addClass('mdb-select');
+    $('#dtMaterialDesignExample_wrapper .mdb-select').materialSelect();
+    $('#dtMaterialDesignExample_wrapper .dataTables_filter').find('label').remove();
+
+    $('#dtWork').DataTable();
+    $('#dtWork_wrapper').find('label').each(function () {
+        $(this).parent().append($(this).children());
+    });
+    $('#dtWork_wrapper .dataTables_filter').find('input').each(function () {
+        const $this = $(this);
+        $this.attr("placeholder", "Rechercher...");
+        $this.removeClass('form-control-sm');
+    });
+    $('#dtWork_wrapper .dataTables_length').addClass('d-flex flex-row');
+    $('#dtWork_wrapper .dataTables_filter').addClass('md-form');
+    $('#dtWork_wrapper select').removeClass('custom-select custom-select-sm form-control form-control-sm');
+    $('#dtWork_wrapper select').addClass('mdb-select');
+    $('#dtWork_wrapper .mdb-select').materialSelect();
+    $('#dtWork_wrapper .dataTables_filter').find('label').remove();
+
+    $('.form_email').attr("style", "display:none");
+
+    // var $champs=$('.form-control');
+    // $champs.keyup(function(){
+    //    if($(this).val().length < 5){ // si la chaîne de caractères est inférieure à 5
+    //        $(this).css({ // on rend le champ rouge
+    //            borderColor : 'red',
+    //        color : 'red'
+    //        });
+    //    } else {
+    //        $(this).css({ // si tout est bon, on le rend vert
+    //        borderColor : 'green',
+    //        color : 'green'
+    //    });
+    //    }
+    // });
+
+});
+</script>
+{% endblock %}

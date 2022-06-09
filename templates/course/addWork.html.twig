@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<link href="{{asset('dist/dropzone.css')}}" rel="stylesheet" />
+<style>
+    .my-custom-scrollbar {
+    position: relative;
+    height: 250px;
+    overflow: auto;
+    }
+    .card-img-35 {
+    width: 35px;
+    }
+    .mt-3p {
+    margin-top: 3px;
+    }
+    
+</style>
+{% endblock %}
+
+{% block main %}
+	{% if add == null %}
+		<h1>Modifier ou ajouter des documents pour "{{ work.subject }}"</h1>
+	{% else %}
+		<h1>Envoyer mes documents pour "{{ work.subject }}"</h1>
+	{% endif %}
+
+	{{ form_start(form)}}
+	
+	<div id="alert"></div>
+
+	<section class="my-4">
+		<div class="jumbotron-fluid">
+	    	<h4><i class="fa fa-angle-right"></i> Envoi des documents</h4>
+			<section class="wrapper">
+		        <div class="form-group">
+			        <div class="dropzone"></div>
+			    </div>			          
+		    </section>
+	    </div>
+	</section>
+
+{% if add == null %}
+	{{ form_row(form.comment, {'row_attr': {'style': 'display:none'}}) }}
+{% else %}
+
+	<div class="p-2">
+        <!-- Section: Block Content -->
+        <section>
+
+            <div class="card">
+                <div class="card-body">
+                    {% for comment in work.comments %}
+                        {% if comment.user == work.user %}
+                            <div class="media mt-3">
+                                <div class="media-body">
+                                    <p class="mt-0 font-weight-bold small mb-1"><span class="text-muted small mt-3p">Le {{ comment.postAt|format_datetime('full', 'short', locale='fr')}}</span><span class="float-right">{{ comment.user.fullName}}</span></p>
+                                    <div class="mb-0 font-weight-light small primary-color text-white p-2 rounded">{{ comment.comment|raw }}</div>
+                                </div>
+                                {% if comment.user.avatar %}
+                                    <img src="{{ asset('/users/'~ work.user.id ~'/'~ work.user.avatar) }}" class="avatar rounded-circle card-img-35 z-depth-1 d-flex ml-3" alt="avatar image">
+                                {% else %}
+                                    <img src="{{ asset('img/user.png') }}" class="avatar rounded-circle card-img-35 z-depth-1 d-flex ml-3"alt="Default avatar">
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="media mt-3">
+                                {% if comment.user.avatar %}
+                                    <img src="{{ asset('/users/'~ work.user.id ~'/'~ work.user.avatar) }}" class="avatar rounded-circle card-img-35 z-depth-1 d-flex mr-3" alt="avatar image">
+                                {% else %}
+                                    <img src="{{ asset('img/user.png') }}" class="avatar rounded-circle card-img-35 z-depth-1 d-flex mr-3"alt="Default avatar">
+                                {% endif %}
+                                <div class="media-body">
+                                    <p class="mt-0 font-weight-bold small mb-1">{{ comment.user.fullName}}<span class="text-muted float-right small mt-3p">Le {{ comment.postAt|format_datetime('full', 'short', locale='fr')}}</span></p>
+                                    <div class="mb-0 font-weight-light small grey lighten-2 p-2 rounded">{{ comment.comment|raw }}</div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        Aucun commentaire n'a été trouvé.
+                    {% endfor %}
+
+                </div>
+            </div>
+
+        </section>
+        <!-- Section: Block Content -->
+    </div>
+    <div class="card-footer white mb-3">
+        <div class="form-group mb-0">
+            
+            {{ form_row(form.comment, {'label': 'Tu peux nous laisser un commentaire ci dessous :'}) }}
+            
+        </div>
+    </div>
+{% endif %}	
+	<a href="{{ path('course_listWorks') }}" class="btn btn-secondary"><i class="fa fa-chevron-left mr-2"></i>Retour</a>
+	<button type="submit" class="btn btn-success">Enregistrer</button>
+
+	{{ form_end(form)}}
+
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('dist/dropzone.js')}}"></script>
+	<script>
+	// init,configure dropzone
+	Dropzone.autoDiscover = false;
+	var dropzone_default = new Dropzone(".dropzone", {
+	    url: '{{ path('uploadFilesWork', {'work': work.id}) }}',
+	    uploadMultiple: true,
+	    dictDefaultMessage: 'Dépose tes documents ici ou clique dans cette zone',
+	    // acceptedFiles: 'image/*',
+	    // dictInvalidFileType: 'Mauvais type de fichier ! Seulement des images sont acceptées',
+	    // maxFilesize: 10,  // in Mb
+	    // dictFileTooBig: 'Fichier trop volumineux ! Taille max : 10Mo',
+	    init: function () {
+	        $.get('{{ path('getworkFiles', {'work': work.id}) }}', function(data) {
+	            $.each(data, function(key,value){
+	                var mockFile = { name: value.name, size: value.size };
+	                dropzone_default.emit("addedfile", mockFile);
+	                dropzone_default.emit("thumbnail", mockFile, "{{ asset('works/'~ app.user.id )}}/"+value.name);
+	                dropzone_default.emit("complete", mockFile);
+	            });
+	        });
+	        
+	        this.on("success", function(response) {
+	            if (response.uploaded) 
+	                alert('Le fichier a bien été uploadé : ' + response.fileName);
+	        });
+
+	        this.on("addedfile", function(file) {
+
+	            // Create the remove button
+	            var removeButton = Dropzone.createElement("<button class='btn btn-danger btn-rounded btn-sm'><i class='fas fa-trash mr-2'></i>Retirer le fichier</button>");
+	            
+	            // Capture the Dropzone instance as closure.
+	            var _this = this;
+
+	            // Listen to the click event
+	            removeButton.addEventListener("click", function(e) {
+	                // Make sure the button click doesn't submit the form:
+	                e.preventDefault();
+	                e.stopPropagation();
+
+	                if (confirm('Supprimer le fichier : '+file.name+' ?')) {
+
+	                    // Remove the file preview.
+	                    _this.removeFile(file);
+	                 
+	                    $.ajax({
+	                        url: "{{ path('deleteWorkFiles', {'work': work.id}) }}",
+	                        type: "GET",
+	                        data: {'name': file.name}
+	                    })
+	                    .done(function() {
+	                        $('#alert').append('<div class="alert alert-success fade show">Fichier supprimé !</div>');
+	                        setTimeout(function() {$(".alert").alert('close')}, 2000);
+	                    });
+	                };
+	                
+	            });
+
+	            // Add the button to the file preview element.
+	            file.previewElement.appendChild(removeButton);
+	        });
+	    }
+	});
+</script>
+{% endblock %}

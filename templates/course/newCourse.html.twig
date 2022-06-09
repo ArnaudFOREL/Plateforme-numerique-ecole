@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+	<h1>Nouveau cours</h1>
+
+	{{ form_start(form)}}
+		
+	{{ form_row(form.title, {'label': "Titre du cours"})}}
+
+	{{ form_row(form.description, {'label': "Courte description (affichée sur la page d'accueil)"})}}
+
+	<div class="row my-4">
+		<div class="col-md-6">
+			{{ form_label(form.image, 'Choisir une image', {'label_attr': {'class': 'custom-file-label'}}  ) }}
+			{{ form_widget(form.image) }}
+			<small>{{ form_help(form.image, {'help': "Facultatif, par défaut l'image de la catégorie"}) }}</small>
+		</div>
+	</div>
+	
+	<div class="row mt-4">
+		<div class="col-md-6">
+			{{ form_row(form.startAt, {'label': "Date de début du cours"})}}
+		</div>
+		
+		<div class="col-md-6">
+			{{ form_row(form.endAt, {'label': "Date de fin du cours"})}}
+		</div>
+	</div>
+
+	<div class="row my-3">
+		<div class="col-md-6">
+			{{ form_row(form.category, {'label': "Choix de la catégorie", 'attr': {'class': 'mdb-select md-form mt-1 colorful-select dropdown-primary'}})}}
+		</div>
+		
+		<div class="col-md-6">
+			{{ form_row(form.classroom, {'label': "Choix du groupe", 'attr': {'class': 'mdb-select md-form mt-1'}})}}
+		</div>
+	</div>
+	
+	<div class="row my-3">
+		<div class="col-md-6">
+			{{ form_row(form.is_uploadEnd, {'label': "Afficher un rappel d'envoi des travaux en fin de cours ?", 'attr': {'class': 'mdb-select md-form colorful-select dropdown-primary mt-0'}, 'label_attr': {'class': 'text-primary'}}) }}
+		</div>
+	</div>
+	
+	<a href="{{ path('admin_index') }}" class="btn btn-secondary"><i class="fa fa-chevron-left mr-2"></i>Annuler</a>
+	<button type="submit" class="btn btn-success">Enregistrer</button>
+
+	{{ form_end(form)}}
+    
+{% endblock %}

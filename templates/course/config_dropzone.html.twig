@@ -1,0 +1,69 @@
+<script>
+// init,configure dropzone
+Dropzone.autoDiscover = false;
+var dropzone_default = new Dropzone(".dropzone", {
+    url: '{{ path('fileuploadhandler', {course: course.id, object: object.id}) }}',
+    uploadMultiple: true,
+    dictDefaultMessage: 'Déposez vos documents ici ou cliquez dans cette zone',
+    timeout: 500000,
+    maxFilesize: 1000,  // in Mb
+    dictFileTooBig: 'Fichier trop volumineux ! Taille max : 1 Go',
+    init: function () {
+        $.get('{{ path('getdocuments', {object: object.id}) }}', function(data) {
+            $.each(data, function(key,value){
+                var mockFile = { name: value.name, size: value.size };
+                dropzone_default.emit("addedfile", mockFile);
+                dropzone_default.emit("thumbnail", mockFile, {% if object.id is not null %}"{{ asset('tasks/'~ object.course.id ~'/'~ object.id )}}/"+value.name{% else %}value.name{% endif %});
+                dropzone_default.emit("complete", mockFile);
+            });
+        });
+        
+        this.on("success", function(response) {
+            if (response.uploaded == true) 
+                $('#alert').append('<div class="alert alert-success fade show">Le fichier "' + response.fileName + '" a bien été uploadé !</div>');
+                setTimeout(function() {$(".alert").alert('close')}, 2000);
+        });
+
+
+        this.on("addedfile", function(file) {
+
+            // Create the remove button
+            var removeButton = Dropzone.createElement("<button class='btn btn-danger btn-rounded btn-sm'><i class='fas fa-trash mr-2'></i>Retirer le fichier</button>");
+            
+            // Capture the Dropzone instance as closure.
+            var _this = this;
+
+            // Listen to the click event
+            removeButton.addEventListener("click", function(e) {
+                // Make sure the button click doesn't submit the form:
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (confirm('Supprimer le fichier : '+file.name+' ?')) {
+
+                    // Remove the file preview.
+                    _this.removeFile(file);
+                 
+                    $.ajax({
+                        url: {% if object.id is not null %}"{{ path('deletedocs', {object: object.id}) }}"{% else %}""{% endif %},
+                        type: "GET",
+                        data: {'name': file.name}
+                    })
+                    .done(function() {
+                        $('#alert').append('<div class="alert alert-success fade show">Fichier supprimé !</div>');
+                        setTimeout(function() {$(".alert").alert('close')}, 2000);
+                    })
+                    .fail(function() {
+                        $('#alert').append('<div class="alert alert-danger fade show">Erreur !</div>');
+                        setTimeout(function() {$(".alert").alert('close')}, 2000);
+                    });
+                };
+                
+            });
+
+            // Add the button to the file preview element.
+            file.previewElement.appendChild(removeButton);
+        });
+    }
+});
+</script>

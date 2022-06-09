@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'course_show_work' %}
+
+
+{% block main %}
+<div class="container my-5">
+    <!-- Section: Block Content -->
+  <section>
+
+    <div class="card">
+      <div class="card-body">
+
+        <h5 class="text-center font-weight-bold mb-4"><i class="fas fa-clipboard-list pr-2"></i>Mes travaux</h5>
+
+        <hr>
+
+        <!--Grid row-->
+        <div class="row">
+
+          <!--Grid column-->
+          <div class="col-12 mb-3 mx-auto">
+            {% for work in works %}
+            <div class="media">
+                {% if work.isRead == 0 %}
+                    <i class="fa fa-folder mr-3"></i>
+                {% else %}
+                    <i class="fa fa-folder-open mr-3"></i>
+                {% endif %}
+              {# <img class="d-flex mr-3" src="https://mdbootstrap.com/img/Photos/Others/placeholder1.jpg" alt="Generic placeholder image"> #}
+              <div class="media-body">
+                <h6 class="mt-1 {% if work.isRead == 0 %}font-weight-bold{% endif %}">
+                    <a href="{{ path('course_showWork', {work: work.id}) }}">{{ work.subject }}</a>
+                    <p class="float-right">{{ work.postAt|format_datetime('full', 'short', locale='fr') }}</p>
+                </h6>
+                {% if work.isRead == 0 %}
+                    <a href="{{ path('course_editWork', {work: work.id}) }}" title="Editer" class="float-right"><i class="far fa-edit"></i> Editer</a>
+                {% endif %}
+              </div>
+            </div>
+            <hr>  
+            {% else %}
+                <div class="row">
+                    <div class="col-lg-6">
+                        <img src="https://42f2671d685f51e10fc6-b9fcecea3e50b3b59bdc28dead054ebc.ssl.cf5.rackcdn.com/illustrations/warning_cyit.svg" alt="" class="img-fluid">
+                    </div>
+                    <div class="col-lg-6 d-flex align-items-center justify-content-center">
+                        <h4>Tu n'as pas rendu de travaux.</h4>
+                    </div>
+                </div>
+                         
+             {% endfor %}
+          </div>
+          <!--Grid column-->
+        
+        </div>
+        <!--Grid row-->
+
+        <hr>
+        <p class="text-center mt-4 mb-1">Tu peux modifier les documents tant qu'ils n'ont pas été vu par un professeur.</p>
+
+      </div>
+    </div>
+
+  </section>
+  <!-- Section: Block Content -->
+    <div class="row">
+        <a href="{{ path('course_list') }}" class="btn btn-secondary"><i class="fa fa-chevron-left mr-2"></i>Retour</a>
+    </div>
+</div>
+    
+{% endblock %}
+
+

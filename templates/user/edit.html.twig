@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'user_edit' %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="section">
+                <a href="{{ path('user_change_password') }}" class="btn btn-warning">
+                    <i class="fa fa-lock" aria-hidden="true"></i> {{ 'action.change_password'|trans }}
+                </a>
+                <a href="{{ path('user_profile') }}" class="btn btn-info">
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i> Retour
+                </a>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+
+            <h1>{{ 'title.edit_user'|trans }}</h1>
+
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-save" aria-hidden="true"></i> {{ 'action.save'|trans }}
+                </button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    
+{% endblock %}
+
